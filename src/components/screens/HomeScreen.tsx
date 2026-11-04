@@ -1,17 +1,48 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import CourseCard from "@/components/CourseCard";
+import { Palette } from "@/constants/palette";
+
+type Course = {
+  id: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  title: string;
+  description: string;
+};
+
+const COURSES: Course[] = [
+  {
+    id: "zbrojny-preukaz",
+    icon: "shield-checkmark",
+    title: "Zbrojný preukaz",
+    description: "Skupiny A, B, C, D, E – Testy a legislatíva",
+  },
+  {
+    id: "sbs-s",
+    icon: "lock-closed",
+    title: "SBS – Preukaz Typ S",
+    description: "Strážna služba a odborná príprava",
+  },
+  {
+    id: "sbs-p",
+    icon: "business",
+    title: "SBS – Preukaz Typ P",
+    description: "Fyzická ochrana a detektívna služba",
+  },
+];
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
+
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.contentContainer}
+      contentContainerStyle={[
+        styles.contentContainer,
+        { paddingTop: insets.top + 20 },
+      ]}
     >
       {/* Vitacia hlavička */}
       <View style={styles.header}>
@@ -21,47 +52,14 @@ export default function HomeScreen() {
         </Text>
       </View>
 
-      {/* Karta kurzu: Zbrojný preukaz */}
-      <TouchableOpacity style={styles.card} activeOpacity={0.8}>
-        <View style={styles.iconContainer}>
-          <Ionicons name="shield-checkmark" size={28} color="#3b82f6" />
-        </View>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Zbrojný preukaz</Text>
-          <Text style={styles.cardDescription}>
-            Skupiny A, B, C, D, E – Testy a legislatíva
-          </Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color="#6b7280" />
-      </TouchableOpacity>
-
-      {/* Karta kurzu: SBS Typ S */}
-      <TouchableOpacity style={styles.card} activeOpacity={0.8}>
-        <View style={styles.iconContainer}>
-          <Ionicons name="lock-closed" size={28} color="#3b82f6" />
-        </View>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>SBS – Preukaz Typ S</Text>
-          <Text style={styles.cardDescription}>
-            Strážna služba a odborná príprava
-          </Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color="#6b7280" />
-      </TouchableOpacity>
-
-      {/* Karta kurzu: SBS Typ P */}
-      <TouchableOpacity style={styles.card} activeOpacity={0.8}>
-        <View style={styles.iconContainer}>
-          <Ionicons name="business" size={28} color="#3b82f6" />
-        </View>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>SBS – Preukaz Typ P</Text>
-          <Text style={styles.cardDescription}>
-            Fyzická ochrana a detektívna služba
-          </Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color="#6b7280" />
-      </TouchableOpacity>
+      {COURSES.map((course) => (
+        <CourseCard
+          key={course.id}
+          icon={course.icon}
+          title={course.title}
+          description={course.description}
+        />
+      ))}
     </ScrollView>
   );
 }
@@ -69,11 +67,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f172a", // Tmavé pozadie (slate-900)
+    backgroundColor: Palette.background,
   },
   contentContainer: {
     padding: 20,
-    paddingTop: 60,
   },
   header: {
     marginBottom: 24,
@@ -81,43 +78,11 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: Palette.text,
     marginBottom: 4,
   },
   subtitleText: {
     fontSize: 16,
-    color: "#9ca3af", // Sivá (gray-400)
-  },
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1e293b", // Svetlejšia tmavá (slate-800)
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#334155",
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "rgba(59, 130, 246, 0.1)", // Jemné modré pozadie
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#ffffff",
-    marginBottom: 4,
-  },
-  cardDescription: {
-    fontSize: 14,
-    color: "#9ca3af",
+    color: Palette.textSecondary,
   },
 });

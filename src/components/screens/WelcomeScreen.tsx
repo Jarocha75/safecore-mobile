@@ -1,6 +1,9 @@
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { Palette } from "@/constants/palette";
 
 export default function WelcomeScreen() {
   return (
@@ -11,6 +14,7 @@ export default function WelcomeScreen() {
           source={require("../../../assets/logo/logo-dark.png")}
           style={styles.logo}
           contentFit="contain"
+          accessibilityLabel="SafeCore logo"
         />
 
         {/* Nadpis a podnadpis */}
@@ -23,11 +27,21 @@ export default function WelcomeScreen() {
 
       {/* Tlačidlá dole */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.primaryButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.primaryButton}
+          activeOpacity={0.8}
+          accessibilityRole="button"
+          onPress={() => router.replace("/home")} // TODO: registrácia
+        >
           <Text style={styles.primaryButtonText}>Začať / Registrácia</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          activeOpacity={0.8}
+          accessibilityRole="button"
+          onPress={() => router.replace("/home")} // TODO: prihlásenie
+        >
           <Text style={styles.secondaryButtonText}>
             Už mám účet (Prihlásiť sa)
           </Text>
@@ -40,7 +54,7 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f172a", // Tmavé pozadie (slate-900)
+    backgroundColor: Palette.background,
     justifyContent: "space-between",
     padding: 24,
   },
@@ -54,19 +68,19 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 80,
     borderWidth: 4,
-    borderColor: "rgba(80, 160, 225, 0.4)",
+    borderColor: Palette.logoRing,
     marginBottom: 24,
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: Palette.text,
     marginBottom: 12,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: "#9ca3af",
+    color: Palette.textSecondary,
     textAlign: "center",
     paddingHorizontal: 20,
     lineHeight: 24,
@@ -77,17 +91,17 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   primaryButton: {
-    backgroundColor: "#3b82f6",
+    backgroundColor: Palette.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
-    shadowColor: "#3b82f6",
+    shadowColor: Palette.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
   },
   primaryButtonText: {
-    color: "#ffffff",
+    color: Palette.text,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -97,10 +111,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#334155",
+    borderColor: Palette.border,
   },
   secondaryButtonText: {
-    color: "#e2e8f0",
+    color: Palette.textButtonSecondary,
     fontSize: 16,
     fontWeight: "500",
   },
