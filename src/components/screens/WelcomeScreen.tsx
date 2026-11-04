@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -6,10 +6,12 @@ export default function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        {/* Logo / Ikona */}
-        <View style={styles.logoContainer}>
-          <Ionicons name="shield-checkmark" size={64} color="#3b82f6" />
-        </View>
+        {/* Logo */}
+        <Image
+          source={require("../../../assets/logo/logo-dark.png")}
+          style={styles.logo}
+          contentFit="contain"
+        />
 
         {/* Nadpis a podnadpis */}
         <Text style={styles.title}>SafeCore Mobile</Text>
@@ -47,16 +49,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  logoContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "rgba(59, 130, 246, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
+  logo: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 4,
+    borderColor: "rgba(80, 160, 225, 0.4)",
     marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "rgba(59, 130, 246, 0.2)",
   },
   title: {
     fontSize: 32,
