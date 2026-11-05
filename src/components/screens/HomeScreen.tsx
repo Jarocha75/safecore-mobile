@@ -1,9 +1,9 @@
-import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import CustomHeader from "@/components/CustomHeader";
 import CourseCard from "@/components/CourseCard";
 import { Palette } from "@/constants/palette";
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Course = {
   id: string;
@@ -34,33 +34,28 @@ const COURSES: Course[] = [
 ];
 
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
-
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={[
-        styles.contentContainer,
-        { paddingTop: insets.top + 20 },
-      ]}
-    >
-      {/* Vitacia hlavička */}
-      <View style={styles.header}>
-        <Text style={styles.welcomeText}>Vitaj v SafeCore 👋</Text>
-        <Text style={styles.subtitleText}>
-          Tvoja profesionálna príprava na skúšky
-        </Text>
-      </View>
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <CustomHeader
+        title="Vitaj v SafeCore 👋"
+        description="Tvoja profesionálna príprava na skúšky"
+        onNotificationPress={() => console.log("Klik na notifikácie")}
+      />
 
-      {COURSES.map((course) => (
-        <CourseCard
-          key={course.id}
-          icon={course.icon}
-          title={course.title}
-          description={course.description}
-        />
-      ))}
-    </ScrollView>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        {COURSES.map((course) => (
+          <CourseCard
+            key={course.id}
+            icon={course.icon}
+            title={course.title}
+            description={course.description}
+          />
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -71,18 +66,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
-  },
-  header: {
-    marginBottom: 24,
-  },
-  welcomeText: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: Palette.text,
-    marginBottom: 4,
-  },
-  subtitleText: {
-    fontSize: 16,
-    color: Palette.textSecondary,
   },
 });
