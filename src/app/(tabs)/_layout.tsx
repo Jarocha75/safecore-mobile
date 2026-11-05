@@ -25,6 +25,33 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="tests"
+        options={{
+          title: "Testy",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="help-circle" size={size} color={color as string} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="license"
+        options={{
+          title: "Preukaz",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="card" size={size} color={color as string} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profil",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color as string} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
