@@ -1,13 +1,16 @@
 import CustomHeader from "@/components/CustomHeader";
 import CourseCard from "@/components/CourseCard";
 import { Palette } from "@/constants/palette";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import type { ReactNode } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const ICON_SIZE = 28;
+
 type Course = {
   id: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: ReactNode;
   title: string;
   description: string;
 };
@@ -15,19 +18,27 @@ type Course = {
 const COURSES: Course[] = [
   {
     id: "zbrojny-preukaz",
-    icon: "shield-checkmark",
+    icon: (
+      <MaterialCommunityIcons
+        name="pistol"
+        size={ICON_SIZE}
+        color={Palette.primary}
+      />
+    ),
     title: "Zbrojný preukaz",
     description: "Skupiny A, B, C, D, E – Testy a legislatíva",
   },
   {
     id: "sbs-s",
-    icon: "lock-closed",
+    icon: (
+      <Ionicons name="lock-closed" size={ICON_SIZE} color={Palette.primary} />
+    ),
     title: "SBS – Preukaz Typ S",
     description: "Strážna služba a odborná príprava",
   },
   {
     id: "sbs-p",
-    icon: "business",
+    icon: <Ionicons name="business" size={ICON_SIZE} color={Palette.primary} />,
     title: "SBS – Preukaz Typ P",
     description: "Fyzická ochrana a detektívna služba",
   },

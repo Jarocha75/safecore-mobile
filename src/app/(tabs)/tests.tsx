@@ -1,6 +1,6 @@
 import CustomHeader from "@/components/CustomHeader";
 import { Palette } from "@/constants/palette";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   ScrollView,
   StyleSheet,
@@ -34,8 +34,8 @@ export default function TestsScreen() {
         >
           <View style={styles.cardHeader}>
             <View style={[styles.iconContainer, styles.iconContainerPrimary]}>
-              <Ionicons
-                name="shield-checkmark"
+              <MaterialCommunityIcons
+                name="pistol"
                 size={24}
                 color={Palette.primary}
               />

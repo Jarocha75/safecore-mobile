@@ -1,19 +1,33 @@
 import CustomHeader from "@/components/CustomHeader";
 import { Palette } from "@/constants/palette";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import type { ReactNode } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type LicenseCard = {
   id: string;
   title: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: ReactNode;
 };
 
-// TODO: pod každou kartou zobraziť testy zo Supabase
 const LICENSES: LicenseCard[] = [
-  { id: "zbrojny-preukaz", title: "Zbrojný preukaz", icon: "shield-checkmark" },
-  { id: "preukaz-sbs", title: "Preukaz SBS", icon: "id-card" },
+  {
+    id: "zbrojny-preukaz",
+    title: "Zbrojný preukaz",
+    icon: (
+      <MaterialCommunityIcons
+        name="pistol"
+        size={24}
+        color={Palette.primary}
+      />
+    ),
+  },
+  {
+    id: "preukaz-sbs",
+    title: "Preukaz SBS",
+    icon: <Ionicons name="id-card" size={24} color={Palette.primary} />,
+  },
 ];
 
 export default function LicenseScreen() {
@@ -37,7 +51,7 @@ export default function LicenseScreen() {
             activeOpacity={0.8}
             onPress={() => console.log(`Klik na ${license.title}`)}
           >
-            <Ionicons name={license.icon} size={24} color={Palette.primary} />
+            {license.icon}
             <Text style={styles.cardTitle}>{license.title}</Text>
             <Ionicons
               name="chevron-forward"

@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
+import type { ReactNode } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { Palette } from "@/constants/palette";
 
 type CourseCardProps = {
-  icon: keyof typeof Ionicons.glyphMap;
+  /** Hotová ikona (z ľubovoľnej sady), napr. <Ionicons ... />. */
+  icon: ReactNode;
   title: string;
   description: string;
   onPress?: () => void;
@@ -24,9 +26,7 @@ export default function CourseCard({
       accessibilityRole="button"
       accessibilityLabel={`${title}. ${description}`}
     >
-      <View style={styles.iconContainer}>
-        <Ionicons name={icon} size={28} color={Palette.primary} />
-      </View>
+      <View style={styles.iconContainer}>{icon}</View>
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
