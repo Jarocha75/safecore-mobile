@@ -5,6 +5,14 @@ export const Palette = {
   border: "#334155", // slate-700
   primary: "#3b82f6", // blue-500
   primarySoft: "rgba(59, 130, 246, 0.1)",
+  primaryMuted: "rgba(59, 130, 246, 0.15)",
+  primaryBorder: "rgba(59, 130, 246, 0.3)",
+  success: "#10b981", // emerald-500
+  successMuted: "rgba(16, 185, 129, 0.15)",
+  successBorder: "rgba(16, 185, 129, 0.3)",
+  danger: "#ef4444", // red-500
+  dangerSoft: "rgba(239, 68, 68, 0.1)",
+  dangerBorder: "rgba(239, 68, 68, 0.3)",
   logoRing: "rgba(80, 160, 225, 0.4)",
   text: "#ffffff",
   textSecondary: "#9ca3af", // gray-400

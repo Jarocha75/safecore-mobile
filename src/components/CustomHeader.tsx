@@ -1,5 +1,6 @@
 import { Palette } from "@/constants/palette";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface CustomHeaderProps {
@@ -17,23 +18,43 @@ export default function CustomHeader({
   showNotification = true,
   onNotificationPress,
 }: CustomHeaderProps) {
+  const hasTitleBlock = Boolean(title || subtitle || description);
+
   return (
     <View style={styles.headerContainer}>
-      <View style={styles.textContainer}>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-        <Text style={styles.title}>{title}</Text>
-        {description && <Text style={styles.description}>{description}</Text>}
+      <View style={styles.brandRow}>
+        <View style={styles.brand}>
+          <Image
+            source={require("../../assets/logo/logo-dark.png")}
+            style={styles.logo}
+            contentFit="cover"
+            accessibilityLabel="SafeCore logo"
+          />
+          <Text style={styles.brandText}>SafeCore mobile</Text>
+        </View>
+
+        {showNotification && (
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={onNotificationPress}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name="notifications-outline"
+              size={22}
+              color={Palette.textButtonSecondary}
+            />
+            <View style={styles.badge} />
+          </TouchableOpacity>
+        )}
       </View>
 
-      {showNotification && (
-        <TouchableOpacity
-          style={styles.iconButton}
-          onPress={onNotificationPress}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="notifications-outline" size={22} color={Palette.textButtonSecondary} />
-          <View style={styles.badge} />
-        </TouchableOpacity>
+      {hasTitleBlock && (
+        <View style={styles.textContainer}>
+          {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+          <Text style={styles.title}>{title}</Text>
+          {description && <Text style={styles.description}>{description}</Text>}
+        </View>
       )}
     </View>
   );
@@ -41,9 +62,6 @@ export default function CustomHeader({
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: 16,
     paddingBottom: 16,
@@ -51,8 +69,30 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Palette.surface,
   },
+  brandRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  brand: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  logo: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: Palette.logoRing,
+  },
+  brandText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: Palette.text,
+  },
   textContainer: {
-    flex: 1,
+    marginTop: 16,
   },
   subtitle: {
     fontSize: 12,
