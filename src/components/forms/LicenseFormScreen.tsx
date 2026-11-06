@@ -5,6 +5,7 @@ import type {
   LicenseFormErrors,
   LicenseFormValues,
 } from "@/types/license";
+import { formatPhone, isValidPhone } from "@/utils/phone";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -31,22 +32,29 @@ function validate(
   if (!values.licenseNumber.trim())
     errors.licenseNumber = config.numberRequiredMessage;
   if (!values.validUntil) errors.validUntil = "Vyber dátum platnosti.";
-  if (!/^\+?[0-9 ]{9,15}$/.test(values.phone.trim()))
+  if (!isValidPhone(values.phone))
     errors.phone = "Zadaj platné telefónne číslo.";
   return errors;
 }
 
-type FieldProps = TextInputProps & { label: string; error?: string };
+type FieldProps = TextInputProps & {
+  label: string;
+  error?: string;
+  prefix?: string;
+};
 
-function Field({ label, error, ...inputProps }: FieldProps) {
+function Field({ label, error, prefix, ...inputProps }: FieldProps) {
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput
-        {...inputProps}
-        style={[styles.input, error ? styles.inputError : null]}
-        placeholderTextColor={Palette.icon}
-      />
+      <View style={[styles.inputRow, error ? styles.inputError : null]}>
+        {prefix ? <Text style={styles.prefix}>{prefix}</Text> : null}
+        <TextInput
+          {...inputProps}
+          style={styles.inputText}
+          placeholderTextColor={Palette.icon}
+        />
+      </View>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
@@ -140,12 +148,15 @@ export default function LicenseFormScreen({
           <Field
             label="Telefónne číslo"
             value={values.phone}
-            onChangeText={setField("phone")}
+            onChangeText={(text) => setField("phone")(formatPhone(text))}
             error={errors.phone}
-            placeholder="+421 900 000 000"
-            keyboardType="phone-pad"
-            autoComplete="tel"
-            maxLength={16}
+            prefix="+"
+            placeholder="421 900 000 000"
+            keyboardType="number-pad"
+            autoComplete="off"
+            textContentType="none"
+            importantForAutofill="no"
+            maxLength={19}
           />
 
           <TouchableOpacity
@@ -187,12 +198,18 @@ const styles = StyleSheet.create({
     color: Palette.textButtonSecondary,
     marginBottom: 8,
   },
-  input: {
+  inputRow: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Palette.surface,
     borderWidth: 1,
     borderColor: Palette.border,
     borderRadius: 12,
     paddingHorizontal: 16,
+  },
+  prefix: { fontSize: 16, color: Palette.textSecondary, marginRight: 2 },
+  inputText: {
+    flex: 1,
     paddingVertical: 14,
     fontSize: 16,
     color: Palette.text,
