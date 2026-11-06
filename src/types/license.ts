@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-/** Hodnoty formulára preukazu (zbrojný preukaz aj preukaz SBS). */
+/** Hodnoty rozpracovaného formulára preukazu (zbrojný preukaz aj preukaz SBS). */
 export type LicenseFormValues = {
   firstName: string;
   lastName: string;
@@ -9,7 +9,10 @@ export type LicenseFormValues = {
   phone: string;
 };
 
-export type LicenseFormErrors = Partial<Record<keyof LicenseFormValues, string>>;
+/** Hodnoty po úspešnej validácii (dátum platnosti je už povinný). */
+export type LicenseFormData = Omit<LicenseFormValues, "validUntil"> & {
+  validUntil: Date;
+};
 
 export type LicenseKind = "firearm" | "sbs";
 
@@ -20,6 +23,7 @@ export type LicenseFormConfig = {
   numberLabel: string;
   numberPlaceholder: string;
   numberRequiredMessage: string;
+  numberInvalidMessage: string;
 };
 
 /** Adresy obrazoviek pre typované trasy Expo Routeru. */

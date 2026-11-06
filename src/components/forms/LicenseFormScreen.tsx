@@ -2,13 +2,16 @@ import DateField from "@/components/forms/DateField";
 import { Palette } from "@/constants/palette";
 import type {
   LicenseFormConfig,
-  LicenseFormErrors,
+  LicenseFormData,
   LicenseFormValues,
 } from "@/types/license";
-import { formatPhone, isValidPhone } from "@/utils/phone";
+import { formatPhone } from "@/utils/phone";
+import { createLicenseSchema } from "@/validation/license";
 import { Ionicons } from "@expo/vector-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useMemo } from "react";
+import { Controller, useForm, type Resolver } from "react-hook-form";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -21,21 +24,6 @@ import {
   type TextInputProps,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-function validate(
-  values: LicenseFormValues,
-  config: LicenseFormConfig,
-): LicenseFormErrors {
-  const errors: LicenseFormErrors = {};
-  if (!values.firstName.trim()) errors.firstName = "Zadaj meno.";
-  if (!values.lastName.trim()) errors.lastName = "Zadaj priezvisko.";
-  if (!values.licenseNumber.trim())
-    errors.licenseNumber = config.numberRequiredMessage;
-  if (!values.validUntil) errors.validUntil = "Vyber dátum platnosti.";
-  if (!isValidPhone(values.phone))
-    errors.phone = "Zadaj platné telefónne číslo.";
-  return errors;
-}
 
 type FieldProps = TextInputProps & {
   label: string;
@@ -65,28 +53,33 @@ export default function LicenseFormScreen({
 }: {
   config: LicenseFormConfig;
 }) {
-  const [values, setValues] = useState<LicenseFormValues>({
-    firstName: "",
-    lastName: "",
-    licenseNumber: "",
-    validUntil: null,
-    phone: "",
+  const schema = useMemo(() => createLicenseSchema(config), [config]);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LicenseFormValues, unknown, LicenseFormData>({
+    // Schéma odmietne null v validUntil, preto je výstupný typ LicenseFormData.
+    // Chyba sa ukáže hneď po opustení poľa, potom sa kontroluje pri písaní.
+    mode: "onTouched",
+    resolver: zodResolver(schema) as Resolver<
+      LicenseFormValues,
+      unknown,
+      LicenseFormData
+    >,
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      licenseNumber: "",
+      validUntil: null,
+      phone: "",
+    },
   });
-  const [errors, setErrors] = useState<LicenseFormErrors>({});
 
-  const setField =
-    <K extends keyof LicenseFormValues>(key: K) =>
-    (value: LicenseFormValues[K]) => {
-      setValues((prev) => ({ ...prev, [key]: value }));
-      if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
-    };
-
-  const handleSave = () => {
-    const found = validate(values, config);
-    setErrors(found);
-    if (Object.keys(found).length > 0) return;
+  const onSubmit = (data: LicenseFormData) => {
     // TODO: odoslať na API / uložiť lokálne
-    console.log(config.title, values);
+    console.log(config.title, data);
     router.back();
   };
 
@@ -113,56 +106,90 @@ export default function LicenseFormScreen({
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
-          <Field
-            label="Meno"
-            value={values.firstName}
-            onChangeText={setField("firstName")}
-            error={errors.firstName}
-            placeholder="Ján"
-            autoCapitalize="words"
-            autoComplete="given-name"
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <Field
+                label="Meno"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.firstName?.message}
+                placeholder="Ján"
+                autoCapitalize="words"
+                autoComplete="given-name"
+              />
+            )}
           />
-          <Field
-            label="Priezvisko"
-            value={values.lastName}
-            onChangeText={setField("lastName")}
-            error={errors.lastName}
-            placeholder="Novák"
-            autoCapitalize="words"
-            autoComplete="family-name"
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <Field
+                label="Priezvisko"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.lastName?.message}
+                placeholder="Novák"
+                autoCapitalize="words"
+                autoComplete="family-name"
+              />
+            )}
           />
-          <Field
-            label={config.numberLabel}
-            value={values.licenseNumber}
-            onChangeText={setField("licenseNumber")}
-            error={errors.licenseNumber}
-            placeholder={config.numberPlaceholder}
-            autoCapitalize="characters"
+          <Controller
+            control={control}
+            name="licenseNumber"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <Field
+                label={config.numberLabel}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.licenseNumber?.message}
+                placeholder={config.numberPlaceholder}
+                autoCapitalize="characters"
+              />
+            )}
           />
-          <DateField
-            label="Dátum platnosti do"
-            value={values.validUntil}
-            onChange={setField("validUntil")}
-            error={errors.validUntil}
+          <Controller
+            control={control}
+            name="validUntil"
+            render={({ field: { value, onChange } }) => (
+              <DateField
+                label="Dátum platnosti do"
+                value={value}
+                onChange={onChange}
+                error={errors.validUntil?.message}
+              />
+            )}
           />
-          <Field
-            label="Telefónne číslo"
-            value={values.phone}
-            onChangeText={(text) => setField("phone")(formatPhone(text))}
-            error={errors.phone}
-            prefix="+"
-            placeholder="421 900 000 000"
-            keyboardType="number-pad"
-            autoComplete="off"
-            textContentType="none"
-            importantForAutofill="no"
-            maxLength={19}
+          <Controller
+            control={control}
+            name="phone"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <Field
+                label="Telefónne číslo"
+                value={value}
+                onChangeText={(text) => onChange(formatPhone(text))}
+                onBlur={onBlur}
+                error={errors.phone?.message}
+                prefix="+"
+                placeholder="421 900 000 000"
+                keyboardType="number-pad"
+                autoComplete="off"
+                textContentType="none"
+                importantForAutofill="no"
+                maxLength={19}
+              />
+            )}
           />
 
           <TouchableOpacity
             style={styles.saveButton}
             activeOpacity={0.8}
-            onPress={handleSave}
+            onPress={() => handleSubmit(onSubmit)()}
           >
             <Text style={styles.saveText}>Uložiť</Text>
           </TouchableOpacity>
