@@ -1,20 +1,16 @@
 import CustomHeader from "@/components/CustomHeader";
 import { Palette } from "@/constants/palette";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import type { ReactNode } from "react";
+import type { LicenseCardItem } from "@/types/license";
+import { router } from "expo-router";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type LicenseCard = {
-  id: string;
-  title: string;
-  icon: ReactNode;
-};
-
-const LICENSES: LicenseCard[] = [
+const LICENSES: LicenseCardItem[] = [
   {
     id: "zbrojny-preukaz",
     title: "Zbrojný preukaz",
+    href: "/firearm-license",
     icon: (
       <MaterialCommunityIcons
         name="pistol"
@@ -26,6 +22,7 @@ const LICENSES: LicenseCard[] = [
   {
     id: "preukaz-sbs",
     title: "Preukaz SBS",
+    href: "/sbs-license",
     icon: <Ionicons name="id-card" size={24} color={Palette.primary} />,
   },
 ];
@@ -49,7 +46,7 @@ export default function LicenseScreen() {
             key={license.id}
             style={styles.card}
             activeOpacity={0.8}
-            onPress={() => console.log(`Klik na ${license.title}`)}
+            onPress={() => router.push(license.href)}
           >
             {license.icon}
             <Text style={styles.cardTitle}>{license.title}</Text>
