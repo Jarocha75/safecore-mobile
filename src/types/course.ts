@@ -24,3 +24,20 @@ export type PrepCourse = {
 export type HomeSection = Course & {
   href?: "/courses";
 };
+
+/** Predmet v osnove odbornej prípravy. */
+export type CourseSubject = {
+  letter: string;
+  title: string;
+  minutes: number;
+};
+
+/** Obsah detailu kurzu (osnova, právny základ). */
+export type CourseDetail = {
+  /** Zhoduje sa s `PrepCourse.id`. */
+  courseId: string;
+  lawReference: string;
+  /** Stránka kurzu na webe, kde prebieha nákup. */
+  webUrl: string;
+  subjects: CourseSubject[];
+};

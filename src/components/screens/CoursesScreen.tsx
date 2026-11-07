@@ -1,4 +1,5 @@
 import PrepCourseCard from "@/components/courses/PrepCourseCard";
+import { COURSE_DETAILS } from "@/constants/course-details";
 import { Palette } from "@/constants/palette";
 import { PREP_COURSES } from "@/constants/prep-courses";
 import { Ionicons } from "@expo/vector-icons";
@@ -33,7 +34,14 @@ export default function CoursesScreen() {
           <PrepCourseCard
             key={course.id}
             course={course}
-            onPress={() => console.log(`Klik na ${course.title}`)}
+            onPress={() =>
+              COURSE_DETAILS[course.id]
+                ? router.push({
+                    pathname: "/courses/[id]",
+                    params: { id: course.id },
+                  })
+                : console.log(`Klik na ${course.title}`)
+            }
           />
         ))}
       </ScrollView>
