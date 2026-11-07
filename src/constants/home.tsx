@@ -36,4 +36,10 @@ export const HOME_SECTIONS: HomeSection[] = [
     title: "Dokumenty a tlačivá",
     description: "Tlačivá a podklady na stiahnutie",
   },
+  {
+    id: "rady-tipy",
+    icon: <Ionicons name="bulb" size={ICON_SIZE} color={Palette.primary} />,
+    title: "Rady a tipy",
+    description: "Ako sa pripraviť na skúšku a čo sa oplatí vedieť",
+  },
 ];
