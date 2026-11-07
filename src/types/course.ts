@@ -19,3 +19,8 @@ export type PrepCourse = {
   /** Voliteľný popis pod podnadpisom. */
   description?: string;
 };
+
+/** Karta na Home, ktorá môže viesť na vlastnú obrazovku. */
+export type HomeSection = Course & {
+  href?: "/courses";
+};

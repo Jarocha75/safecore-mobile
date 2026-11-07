@@ -1,48 +1,11 @@
-import CustomHeader from "@/components/CustomHeader";
+import ContinueStudyCard from "@/components/home/ContinueStudyCard";
 import CourseCard from "@/components/CourseCard";
+import CustomHeader from "@/components/CustomHeader";
+import { HOME_SECTIONS, LAST_STUDY } from "@/constants/home";
 import { Palette } from "@/constants/palette";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import type { ReactNode } from "react";
+import { router } from "expo-router";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const ICON_SIZE = 28;
-
-type Course = {
-  id: string;
-  icon: ReactNode;
-  title: string;
-  description: string;
-};
-
-const COURSES: Course[] = [
-  {
-    id: "zbrojny-preukaz",
-    icon: (
-      <MaterialCommunityIcons
-        name="pistol"
-        size={ICON_SIZE}
-        color={Palette.primary}
-      />
-    ),
-    title: "Zbrojný preukaz",
-    description: "Skupiny A, B, C, D, E – Testy a legislatíva",
-  },
-  {
-    id: "sbs-s",
-    icon: (
-      <Ionicons name="lock-closed" size={ICON_SIZE} color={Palette.primary} />
-    ),
-    title: "SBS – Preukaz Typ S",
-    description: "Strážna služba a odborná príprava",
-  },
-  {
-    id: "sbs-p",
-    icon: <Ionicons name="business" size={ICON_SIZE} color={Palette.primary} />,
-    title: "SBS – Preukaz Typ P",
-    description: "Fyzická ochrana a detektívna služba",
-  },
-];
 
 export default function HomeScreen() {
   return (
@@ -57,12 +20,22 @@ export default function HomeScreen() {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        {COURSES.map((course) => (
+        <ContinueStudyCard
+          progress={LAST_STUDY}
+          onPress={() => console.log("Pokračovať v štúdiu")}
+        />
+
+        {HOME_SECTIONS.map((section) => (
           <CourseCard
-            key={course.id}
-            icon={course.icon}
-            title={course.title}
-            description={course.description}
+            key={section.id}
+            icon={section.icon}
+            title={section.title}
+            description={section.description}
+            onPress={() =>
+              section.href
+                ? router.push(section.href)
+                : console.log(`Klik na ${section.title}`)
+            }
           />
         ))}
       </ScrollView>
