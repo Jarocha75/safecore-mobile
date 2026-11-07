@@ -88,4 +88,61 @@ export const COURSE_DETAILS: Record<string, CourseDetail> = {
       },
     ],
   },
+  "preukaz-p": {
+    courseId: "preukaz-p",
+    lawReference: "§ 5 vyhlášky MV SR č. 634/2005 Z.z.",
+    webUrl: "https://www.safecore.sk/kurzy/p",
+    durationUnit: "teachingHours",
+    note: "K tomuto kurzu bude postupne tvorený obsah k spracovaniu jednotlivých tém.",
+    subjects: [
+      {
+        letter: "a",
+        title: "Základy právneho poriadku Slovenskej republiky",
+        amount: 5,
+      },
+      {
+        letter: "b",
+        title:
+          "Ústava Slovenskej republiky a právna úprava ľudských práv a slobôd",
+        amount: 4,
+      },
+      {
+        letter: "c",
+        title:
+          "Všeobecne záväzné právne predpisy týkajúce sa poskytovania služieb v oblasti súkromnej bezpečnosti",
+        amount: 26,
+      },
+      { letter: "d", title: "Základy trestného práva", amount: 8 },
+      {
+        letter: "e",
+        title: "Základy kriminalistiky a kriminológie",
+        amount: 6,
+      },
+      {
+        letter: "f",
+        title: "Zákon o priestupkoch a správny poriadok",
+        amount: 8,
+      },
+      {
+        letter: "g",
+        title:
+          "Zákon o Policajnom zbore, zákon o obecnej polícii, zákon o Vojenskej polícii a zákon o Slovenskej informačnej službe",
+        amount: 10,
+      },
+      {
+        letter: "h",
+        title:
+          "Teória taktiky a techniky vykonávania zásahov a riešenie modelových situácií",
+        amount: 15,
+      },
+      { letter: "i", title: "Poskytovanie prvej pomoci", amount: 8 },
+      { letter: "j", title: "Požiarna príprava", amount: 5 },
+      {
+        letter: "k",
+        title:
+          "Všeobecne záväzné právne predpisy týkajúce sa ochrany osobných údajov",
+        amount: 5,
+      },
+    ],
+  },
 };
