@@ -1,4 +1,4 @@
-import { COURSE_DETAILS } from "@/constants/course-details";
+import { COURSE_DETAILS, DURATION_LABELS } from "@/constants/course-details";
 import { Palette } from "@/constants/palette";
 import { PREP_COURSES } from "@/constants/prep-courses";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,8 +22,8 @@ export default function CourseDetailScreen({
 }: CourseDetailScreenProps) {
   const course = PREP_COURSES.find((c) => c.id === courseId);
   const detail = COURSE_DETAILS[courseId];
-  const totalMinutes =
-    detail?.subjects.reduce((sum, s) => sum + s.minutes, 0) ?? 0;
+  const unit = detail ? DURATION_LABELS[detail.durationUnit] : null;
+  const total = detail?.subjects.reduce((sum, s) => sum + s.amount, 0) ?? 0;
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
@@ -61,8 +61,8 @@ export default function CourseDetailScreen({
               <Text style={styles.statLabel}>predmetov</Text>
             </View>
             <View style={styles.stat}>
-              <Text style={styles.statValue}>{totalMinutes}</Text>
-              <Text style={styles.statLabel}>minút celkom</Text>
+              <Text style={styles.statValue}>{total}</Text>
+              <Text style={styles.statLabel}>{unit?.total}</Text>
             </View>
           </View>
           <View style={styles.lawCard}>
@@ -78,22 +78,27 @@ export default function CourseDetailScreen({
               activeOpacity={0.8}
               onPress={() => console.log(`Klik na predmet ${subject.letter}`)}
               accessibilityRole="button"
-              accessibilityLabel={`${subject.letter}. ${subject.title}, ${subject.minutes} minút`}
+              accessibilityLabel={`${subject.letter}. ${subject.title}, ${subject.amount} ${unit?.short}`}
             >
               <View style={styles.subjectBadge}>
                 <Text style={styles.subjectBadgeText}>{subject.letter}</Text>
               </View>
               <Text style={styles.subjectTitle}>{subject.title}</Text>
-              <View style={styles.minutesChip}>
-                <Text style={styles.minutesText}>{subject.minutes} min.</Text>
+              <View style={styles.durationChip}>
+                <Text style={styles.durationText}>
+                  {subject.amount} {unit?.short}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}
 
+          {detail.note ? <Text style={styles.note}>{detail.note}</Text> : null}
+
           <View style={styles.cta}>
             <Text style={styles.ctaTitle}>Pripravený začať štúdium?</Text>
             <Text style={styles.ctaText}>
-              Kurz si zakúpite na našom webe. Po zakúpení dostanete email s odkazom na aktiváciu účtu.
+              Kurz si zakúpite na našom webe. Po zakúpení dostanete email s
+              odkazom na aktiváciu účtu.
             </Text>
             <TouchableOpacity
               style={styles.ctaButton}
@@ -101,7 +106,9 @@ export default function CourseDetailScreen({
               onPress={() => WebBrowser.openBrowserAsync(detail.webUrl)}
               accessibilityRole="button"
             >
-              <Text style={styles.ctaButtonText}>Pokračovať na safecore.sk</Text>
+              <Text style={styles.ctaButtonText}>
+                Pokračovať na safecore.sk
+              </Text>
               <Ionicons name="open-outline" size={18} color={Palette.text} />
             </TouchableOpacity>
           </View>
@@ -170,7 +177,13 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   statValue: { fontSize: 26, fontWeight: "bold", color: Palette.text },
-  statLabel: { fontSize: 13, color: Palette.textSecondary, marginTop: 2 },
+  statLabel: {
+    fontSize: 13,
+    color: Palette.textSecondary,
+    marginTop: 2,
+    textAlign: "center",
+    paddingHorizontal: 8,
+  },
   lawCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -226,13 +239,19 @@ const styles = StyleSheet.create({
     color: Palette.text,
     lineHeight: 20,
   },
-  minutesChip: {
+  durationChip: {
     backgroundColor: Palette.primarySoft,
     borderRadius: 8,
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
-  minutesText: { fontSize: 12, fontWeight: "600", color: Palette.primary },
+  durationText: { fontSize: 12, fontWeight: "600", color: Palette.primary },
+  note: {
+    fontSize: 14,
+    color: Palette.textSecondary,
+    lineHeight: 20,
+    marginTop: 4,
+  },
   cta: {
     borderTopWidth: 1,
     borderTopColor: Palette.border,

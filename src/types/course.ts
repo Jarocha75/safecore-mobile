@@ -25,11 +25,15 @@ export type HomeSection = Course & {
   href?: "/courses";
 };
 
+/** Jednotka trvania predmetov v osnove kurzu. */
+export type DurationUnit = "minutes" | "teachingHours";
+
 /** Predmet v osnove odbornej prípravy. */
 export type CourseSubject = {
   letter: string;
   title: string;
-  minutes: number;
+  /** Trvanie v jednotkách kurzu (minúty alebo vyučovacie hodiny). */
+  amount: number;
 };
 
 /** Obsah detailu kurzu (osnova, právny základ). */
@@ -39,5 +43,8 @@ export type CourseDetail = {
   lawReference: string;
   /** Stránka kurzu na webe, kde prebieha nákup. */
   webUrl: string;
+  durationUnit: DurationUnit;
+  /** Voliteľná poznámka pod osnovou. */
+  note?: string;
   subjects: CourseSubject[];
 };
