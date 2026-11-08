@@ -21,8 +21,8 @@ SafeCore mobile is a companion app to the SafeCore web (Next.js + Prisma + Supab
 - **Routing** (Expo Router, `typedRoutes` + React Compiler enabled in `app.json`): `src/app/_layout.tsx` is a headerless Stack with `index` (welcome) and `(tabs)`. Tabs are `home`, `tests`, `license`, `profile`. Other screens (`courses/`, `courses/[id]`, `firearm-license`, `sbs-license`) are pushed on the root stack.
 - **Route files are thin wrappers**; real screens live in `src/components/screens/` (e.g. `CourseDetailScreen`, `HomeScreen`). Shared form logic is one component, `src/components/forms/LicenseFormScreen.tsx`, parametrized by config.
 - **Data/config-driven UI**: course lists, details (subjects, hours, `webUrl`), home sections and license form configs are in `src/constants/` (`courses.tsx`, `course-details.ts`, `prep-courses.ts`, `home.tsx`, `license-forms.ts`). Adding a course/form type means adding config, not a new screen. Types go in `src/types/`, validation (zod + react-hook-form) in `src/validation/`, helpers in `src/utils/`.
-- **Theming**: two systems coexist — template `Colors`/`useTheme` in `src/constants/theme.ts` (light/dark), and the app's brand `Palette` in `src/constants/palette.ts` used by current screens and tab bar.
-- **Platform files**: `.web.tsx` / `.web.ts` variants (`app-tabs.web.tsx`, `animated-icon.web.tsx`, `use-color-scheme.web.ts`) override native ones.
+- **Theming**: the app is dark-only; colors come from the brand `Palette` in `src/constants/palette.ts`, fonts from `src/constants/typography.ts`.
+- **Platform files**: `.web.tsx` / `.web.ts` variants override native ones (none exist at the moment).
 - Path alias: `@/*` → `src/*`, `@/assets/*` → `assets/*`.
 
 ## Conventions
