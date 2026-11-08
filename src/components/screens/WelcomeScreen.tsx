@@ -11,9 +11,9 @@ export default function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        {/* Logo splýva s pozadím – podklad loga je farba pozadia aplikácie */}
+        {/* Priehľadné logo – nemá vlastný podklad, ktorý by presvital */}
         <Image
-          source={require("../../../assets/logo/logo-dark.png")}
+          source={require("../../../assets/logo/logo-dark-removebg-preview.png")}
           style={styles.logo}
           contentFit="contain"
           accessibilityLabel="SafeCore logo"

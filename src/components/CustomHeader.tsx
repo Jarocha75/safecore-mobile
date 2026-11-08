@@ -22,7 +22,7 @@ export default function CustomHeader({
       <View style={styles.brandRow}>
         <View style={styles.brand}>
           <Image
-            source={require("../../assets/logo/logo-dark.png")}
+            source={require("../../assets/logo/logo-dark-removebg-preview.png")}
             style={styles.logo}
             contentFit="contain"
             accessibilityLabel="SafeCore logo"

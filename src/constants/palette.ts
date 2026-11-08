@@ -3,7 +3,7 @@
  * Odvodená z loga: podklad loga, oceľový štít a jasná modrá z nápisu.
  */
 export const Palette = {
-  background: "#121824", // podklad loga – logo s ním splýva
+  background: "#121824", // ladí s tmavým podkladom loga
   surface: "#1A2233", // karty a skupiny
   surfaceRaised: "#232E45", // zvýraznená plocha (písmeno preukazu, vstupy)
   border: "#2B3750", // jemný delič
