@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 
-/** Položka zoznamu kurzov (karta na obrazovke Testy). */
+/**
+ * Položka zoznamu kurzov (karta na obrazovke Testy).
+ * Pri kurzoch Z, S a P sa `id` musí zhodovať s `PrepCourse.id` a kľúčom v `COURSE_DETAILS`.
+ */
 export type Course = {
   id: string;
   icon: ReactNode;

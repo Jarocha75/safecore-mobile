@@ -19,7 +19,7 @@ export const COURSES: Course[] = [
     description: "Skupiny A, B, C, D, E – Testy a legislatíva",
   },
   {
-    id: "sbs-s",
+    id: "preukaz-s",
     icon: (
       <Ionicons name="lock-closed" size={ICON_SIZE} color={Palette.primary} />
     ),
@@ -27,7 +27,7 @@ export const COURSES: Course[] = [
     description: "Strážna služba a odborná príprava",
   },
   {
-    id: "sbs-p",
+    id: "preukaz-p",
     icon: <Ionicons name="business" size={ICON_SIZE} color={Palette.primary} />,
     title: "Preukaz typu P",
     description: "Fyzická ochrana a detektívna služba",
