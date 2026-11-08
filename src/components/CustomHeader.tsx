@@ -34,9 +34,11 @@ export default function CustomHeader({
           <TouchableOpacity
             style={styles.iconButton}
             onPress={onNotificationPress}
+            disabled={!onNotificationPress}
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityLabel="Upozornenia"
+            accessibilityState={{ disabled: !onNotificationPress }}
           >
             <Ionicons
               name="notifications-outline"

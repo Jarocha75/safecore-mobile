@@ -13,7 +13,6 @@ export default function LicenseScreen() {
     <SafeAreaView style={styles.container} edges={["top"]}>
       <CustomHeader
         title="Preukaz"
-        onNotificationPress={() => console.log("Notifikácie")}
       />
 
       <ScrollView

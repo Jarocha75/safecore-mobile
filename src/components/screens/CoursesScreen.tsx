@@ -20,13 +20,14 @@ export default function CoursesScreen() {
           <PrepCourseCard
             key={course.id}
             course={course}
-            onPress={() =>
+            onPress={
               COURSE_DETAILS[course.id]
-                ? router.push({
-                    pathname: "/courses/[id]",
-                    params: { id: course.id },
-                  })
-                : console.log(`Klik na ${course.title}`)
+                ? () =>
+                    router.push({
+                      pathname: "/courses/[id]",
+                      params: { id: course.id },
+                    })
+                : undefined
             }
           />
         ))}

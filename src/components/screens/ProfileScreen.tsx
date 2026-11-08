@@ -12,7 +12,6 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.container} edges={["top"]}>
       <CustomHeader
         title="Môj Profil"
-        onNotificationPress={() => console.log("Notifikácie")}
       />
 
       <ScrollView

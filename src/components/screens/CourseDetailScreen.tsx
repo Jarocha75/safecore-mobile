@@ -61,14 +61,13 @@ export default function CourseDetailScreen({
           <Text style={styles.sectionTitle}>Osnova odbornej prípravy</Text>
           <View style={styles.subjectGroup}>
             {detail.subjects.map((subject, index) => (
-              <PressableScale
+              <View
                 key={subject.letter}
                 style={[
                   styles.subjectRow,
                   index > 0 && styles.subjectRowDivider,
                 ]}
-                onPress={() => console.log(`Klik na predmet ${subject.letter}`)}
-                accessibilityRole="button"
+                accessible
                 accessibilityLabel={`${subject.letter}. ${subject.title}, ${subject.amount} ${unit?.short}`}
               >
                 <Text style={styles.subjectLetter}>{subject.letter}</Text>
@@ -76,7 +75,7 @@ export default function CourseDetailScreen({
                 <Text style={styles.duration}>
                   {subject.amount} {unit?.short}
                 </Text>
-              </PressableScale>
+              </View>
             ))}
           </View>
 

@@ -11,7 +11,6 @@ export default function TestsScreen() {
     <SafeAreaView style={styles.container} edges={["top"]}>
       <CustomHeader
         title="Testy"
-        onNotificationPress={() => console.log("Notifikácie")}
       />
 
       <ScrollView
@@ -29,7 +28,6 @@ export default function TestsScreen() {
             icon={course.icon}
             title={course.title}
             description={course.description}
-            onPress={() => console.log(`Klik na ${course.title}`)}
           />
         ))}
       </ScrollView>

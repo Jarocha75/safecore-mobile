@@ -78,9 +78,8 @@ export default function LicenseFormScreen({
     },
   });
 
-  const onSubmit = (data: LicenseFormData) => {
-    // TODO: odoslať na API / uložiť lokálne
-    console.log(config.title, data);
+  const onSubmit = (_data: LicenseFormData) => {
+    // TODO: odoslať na API / uložiť lokálne (osobné údaje nelogovať)
     router.back();
   };
 

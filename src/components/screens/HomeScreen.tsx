@@ -13,7 +13,6 @@ export default function HomeScreen() {
       <CustomHeader
         title="Vitaj späť"
         description="Pokračuj tam, kde si skončil."
-        onNotificationPress={() => console.log("Klik na notifikácie")}
       />
 
       <ScrollView
@@ -21,10 +20,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <ContinueStudyCard
-          progress={LAST_STUDY}
-          onPress={() => console.log("Pokračovať v štúdiu")}
-        />
+        <ContinueStudyCard progress={LAST_STUDY} />
 
         {HOME_SECTIONS.map((section) => (
           <CourseCard
@@ -32,10 +28,8 @@ export default function HomeScreen() {
             icon={section.icon}
             title={section.title}
             description={section.description}
-            onPress={() =>
-              section.href
-                ? router.push(section.href)
-                : console.log(`Klik na ${section.title}`)
+            onPress={
+              section.href ? () => router.push(section.href!) : undefined
             }
           />
         ))}
