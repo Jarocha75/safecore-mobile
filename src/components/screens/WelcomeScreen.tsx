@@ -1,15 +1,17 @@
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import PressableScale from "@/components/ui/PressableScale";
 import { Palette } from "@/constants/palette";
+import { Font } from "@/constants/typography";
 
 export default function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        {/* Logo */}
+        {/* Logo splýva s pozadím – podklad loga je farba pozadia aplikácie */}
         <Image
           source={require("../../../assets/logo/logo-dark.png")}
           style={styles.logo}
@@ -17,35 +19,29 @@ export default function WelcomeScreen() {
           accessibilityLabel="SafeCore logo"
         />
 
-        {/* Nadpis a podnadpis */}
-        <Text style={styles.title}>SafeCore Mobile</Text>
+        <Text style={styles.title}>Skúška na preukaz bez stresu</Text>
         <Text style={styles.subtitle}>
-          Profesionálna príprava na zbrojný preukaz a odbornú spôsobilosť SBS na
-          jednom mieste.
+          Príprava na zbrojný preukaz a odbornú spôsobilosť SBS. Testy, osnova a
+          zákony vždy po ruke.
         </Text>
       </View>
 
-      {/* Tlačidlá dole */}
       <View style={styles.footer}>
-        <TouchableOpacity
+        <PressableScale
           style={styles.primaryButton}
-          activeOpacity={0.8}
           accessibilityRole="button"
           onPress={() => router.replace("/home")} // TODO: registrácia
         >
-          <Text style={styles.primaryButtonText}>Začať / Registrácia</Text>
-        </TouchableOpacity>
+          <Text style={styles.primaryButtonText}>Vytvoriť účet</Text>
+        </PressableScale>
 
-        <TouchableOpacity
+        <PressableScale
           style={styles.secondaryButton}
-          activeOpacity={0.8}
           accessibilityRole="button"
           onPress={() => router.replace("/home")} // TODO: prihlásenie
         >
-          <Text style={styles.secondaryButtonText}>
-            Už mám účet (Prihlásiť sa)
-          </Text>
-        </TouchableOpacity>
+          <Text style={styles.secondaryButtonText}>Už mám účet</Text>
+        </PressableScale>
       </View>
     </SafeAreaView>
   );
@@ -55,67 +51,58 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Palette.background,
-    justifyContent: "space-between",
-    padding: 24,
+    paddingHorizontal: 24,
   },
   content: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
   logo: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    borderWidth: 4,
-    borderColor: Palette.logoRing,
-    marginBottom: 24,
+    width: "100%",
+    aspectRatio: 1,
+    maxHeight: 320,
+    marginBottom: 12,
   },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
+    fontFamily: Font.displayBold,
+    fontSize: 36,
+    lineHeight: 40,
     color: Palette.text,
     marginBottom: 12,
-    textAlign: "center",
   },
   subtitle: {
-    fontSize: 16,
+    fontFamily: Font.body,
+    fontSize: 17,
+    lineHeight: 25,
     color: Palette.textSecondary,
-    textAlign: "center",
-    paddingHorizontal: 20,
-    lineHeight: 24,
+    maxWidth: 340,
   },
   footer: {
-    width: "100%",
-    gap: 12,
-    paddingBottom: 20,
+    gap: 10,
+    paddingBottom: 16,
   },
   primaryButton: {
     backgroundColor: Palette.primary,
-    paddingVertical: 16,
-    borderRadius: 12,
+    height: 54,
+    borderRadius: 14,
     alignItems: "center",
-    shadowColor: Palette.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    justifyContent: "center",
   },
   primaryButtonText: {
-    color: Palette.text,
-    fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Font.bodySemiBold,
+    fontSize: 17,
+    color: Palette.onPrimary,
   },
   secondaryButton: {
-    backgroundColor: "transparent",
-    paddingVertical: 16,
-    borderRadius: 12,
+    height: 54,
+    borderRadius: 14,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: Palette.border,
+    justifyContent: "center",
+    backgroundColor: Palette.surface,
   },
   secondaryButtonText: {
+    fontFamily: Font.bodySemiBold,
+    fontSize: 17,
     color: Palette.textButtonSecondary,
-    fontSize: 16,
-    fontWeight: "500",
   },
 });

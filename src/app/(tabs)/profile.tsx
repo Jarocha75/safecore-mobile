@@ -1,4 +1,5 @@
 import CustomHeader from "@/components/CustomHeader";
+import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -19,7 +20,10 @@ export default function ProfileScreen() {
         onNotificationPress={() => console.log("Notifikácie")}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Karta s informáciami o používateľovi */}
         <View style={styles.userCard}>
           <View style={styles.avatarContainer}>
@@ -120,81 +124,75 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.background,
   },
   scrollContent: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 8,
     paddingBottom: 40,
   },
   userCard: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Palette.surface,
-    borderRadius: 16,
+    borderRadius: 22,
     padding: 16,
-    borderWidth: 1,
-    borderColor: Palette.border,
-    marginBottom: 24,
+    marginBottom: 28,
   },
   avatarContainer: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: Palette.background,
+    backgroundColor: Palette.surfaceRaised,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: Palette.primary,
     marginRight: 16,
   },
   userInfo: {
     flex: 1,
   },
   userName: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: Font.displayBold,
+    fontSize: 22,
     color: Palette.text,
     marginBottom: 2,
   },
   userEmail: {
-    fontSize: 13,
+    fontFamily: Font.body,
+    fontSize: 14,
     color: Palette.textSecondary,
     marginBottom: 8,
   },
   badgeContainer: {
-    backgroundColor: Palette.primaryMuted,
+    backgroundColor: Palette.stampSoft,
     paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
     alignSelf: "flex-start",
     borderWidth: 1,
-    borderColor: Palette.primaryBorder,
+    borderColor: Palette.stampBorder,
   },
   badgeText: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: Palette.primary,
+    fontFamily: Font.bodySemiBold,
+    fontSize: 13,
+    color: Palette.stamp,
   },
   sectionTitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: Palette.textSecondary,
+    fontFamily: Font.displayBold,
+    fontSize: 20,
+    color: Palette.text,
     marginBottom: 10,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
   },
   menuGroup: {
     backgroundColor: Palette.surface,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: Palette.border,
+    borderRadius: 18,
     overflow: "hidden",
-    marginBottom: 24,
+    marginBottom: 28,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 14,
+    minHeight: 52,
     paddingHorizontal: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Palette.border,
   },
   menuItemLeft: {
@@ -203,7 +201,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   menuItemText: {
-    fontSize: 15,
+    fontFamily: Font.body,
+    fontSize: 16,
     color: Palette.textButtonSecondary,
   },
   logoutButton: {
@@ -212,14 +211,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     backgroundColor: Palette.dangerSoft,
-    borderWidth: 1,
-    borderColor: Palette.dangerBorder,
     borderRadius: 14,
-    paddingVertical: 14,
+    height: 52,
   },
   logoutText: {
-    fontSize: 15,
-    fontWeight: "600",
+    fontFamily: Font.bodySemiBold,
+    fontSize: 16,
     color: Palette.danger,
   },
 });

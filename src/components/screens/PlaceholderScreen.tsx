@@ -1,3 +1,4 @@
+import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
@@ -37,21 +38,23 @@ const styles = StyleSheet.create({
   iconWrap: {
     width: 80,
     height: 80,
-    borderRadius: 40,
-    backgroundColor: Palette.primarySoft,
+    borderRadius: 24,
+    backgroundColor: Palette.surface,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
   },
   title: {
     color: Palette.text,
-    fontSize: 22,
-    fontWeight: "700",
+    fontFamily: Font.displayBold,
+    fontSize: 26,
     marginBottom: 8,
   },
   description: {
     color: Palette.textSecondary,
-    fontSize: 15,
+    fontFamily: Font.body,
+    fontSize: 16,
+    lineHeight: 23,
     textAlign: "center",
   },
 });

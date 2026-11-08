@@ -1,3 +1,4 @@
+import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import { formatDate } from "@/utils/date";
 import { Ionicons } from "@expo/vector-icons";
@@ -81,8 +82,8 @@ export default function DateField({
 const styles = StyleSheet.create({
   field: { marginBottom: 18 },
   label: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontFamily: Font.bodySemiBold,
+    fontSize: 15,
     color: Palette.textButtonSecondary,
     marginBottom: 8,
   },
@@ -91,16 +92,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: Palette.surface,
-    borderWidth: 1,
-    borderColor: Palette.border,
-    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: "transparent",
+    borderRadius: 14,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 15,
   },
   inputError: { borderColor: Palette.danger },
-  value: { fontSize: 16, color: Palette.text },
-  placeholder: { fontSize: 16, color: Palette.icon },
-  errorText: { marginTop: 6, fontSize: 13, color: Palette.danger },
+  value: { fontFamily: Font.body, fontSize: 17, color: Palette.text },
+  placeholder: { fontFamily: Font.body, fontSize: 17, color: Palette.icon },
+  errorText: { marginTop: 6, fontFamily: Font.body, fontSize: 14, color: Palette.danger },
   iosPicker: {
     marginTop: 8,
     backgroundColor: Palette.surface,

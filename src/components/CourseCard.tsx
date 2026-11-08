@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { ReactNode } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import PressableScale from "@/components/ui/PressableScale";
 import { Palette } from "@/constants/palette";
+import { Font } from "@/constants/typography";
 
 type CourseCardProps = {
   /** Hotová ikona (z ľubovoľnej sady), napr. <Ionicons ... />. */
@@ -19,9 +21,8 @@ export default function CourseCard({
   onPress,
 }: CourseCardProps) {
   return (
-    <TouchableOpacity
+    <PressableScale
       style={styles.card}
-      activeOpacity={0.8}
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${title}. ${description}`}
@@ -31,8 +32,8 @@ export default function CourseCard({
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
       </View>
-      <Ionicons name="chevron-forward" size={20} color={Palette.icon} />
-    </TouchableOpacity>
+      <Ionicons name="chevron-forward" size={18} color={Palette.icon} />
+    </PressableScale>
   );
 }
 
@@ -41,32 +42,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Palette.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: Palette.border,
+    borderRadius: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    marginBottom: 10,
+    gap: 14,
   },
   iconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
-    backgroundColor: Palette.primarySoft,
+    borderRadius: 14,
+    backgroundColor: Palette.surfaceRaised,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 16,
   },
   content: {
     flex: 1,
   },
   title: {
+    fontFamily: Font.bodySemiBold,
     fontSize: 18,
-    fontWeight: "600",
     color: Palette.text,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   description: {
-    fontSize: 14,
+    fontFamily: Font.body,
+    fontSize: 15,
+    lineHeight: 20,
     color: Palette.textSecondary,
   },
 });

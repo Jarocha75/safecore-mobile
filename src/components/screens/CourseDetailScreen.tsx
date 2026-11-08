@@ -1,16 +1,12 @@
+import PressableScale from "@/components/ui/PressableScale";
+import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { COURSE_DETAILS, DURATION_LABELS } from "@/constants/course-details";
 import { Palette } from "@/constants/palette";
 import { PREP_COURSES } from "@/constants/prep-courses";
+import { Font } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type CourseDetailScreenProps = {
@@ -27,70 +23,62 @@ export default function CourseDetailScreen({
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
-      <View style={styles.topBar}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-          activeOpacity={0.7}
-          accessibilityLabel="Späť"
-        >
-          <Ionicons name="chevron-back" size={22} color={Palette.text} />
-        </TouchableOpacity>
-        <Text style={styles.topTitle} numberOfLines={1}>
-          {course?.title ?? "Kurz"}
-        </Text>
-        <View style={styles.backButton} />
-      </View>
+      <ScreenTopBar title={course?.title ?? "Kurz"} />
 
       {!course || !detail ? (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>Obsah kurzu pripravujeme.</Text>
         </View>
       ) : (
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.hero}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{course.badge}</Text>
+            <View style={styles.plate}>
+              <Text style={styles.letter}>{course.badge}</Text>
             </View>
             <Text style={styles.subtitle}>{course.subtitle}</Text>
           </View>
 
-          <View style={styles.statsRow}>
+          <View style={styles.statsCard}>
             <View style={styles.stat}>
               <Text style={styles.statValue}>{detail.subjects.length}</Text>
               <Text style={styles.statLabel}>predmetov</Text>
             </View>
+            <View style={styles.statDivider} />
             <View style={styles.stat}>
               <Text style={styles.statValue}>{total}</Text>
               <Text style={styles.statLabel}>{unit?.total}</Text>
             </View>
           </View>
-          <View style={styles.lawCard}>
-            <Ionicons name="scale-outline" size={22} color={Palette.primary} />
+
+          <View style={styles.lawRow}>
+            <Ionicons name="scale-outline" size={20} color={Palette.primary} />
             <Text style={styles.lawText}>{detail.lawReference}</Text>
           </View>
 
           <Text style={styles.sectionTitle}>Osnova odbornej prípravy</Text>
-          {detail.subjects.map((subject) => (
-            <TouchableOpacity
-              key={subject.letter}
-              style={styles.subjectCard}
-              activeOpacity={0.8}
-              onPress={() => console.log(`Klik na predmet ${subject.letter}`)}
-              accessibilityRole="button"
-              accessibilityLabel={`${subject.letter}. ${subject.title}, ${subject.amount} ${unit?.short}`}
-            >
-              <View style={styles.subjectBadge}>
-                <Text style={styles.subjectBadgeText}>{subject.letter}</Text>
-              </View>
-              <Text style={styles.subjectTitle}>{subject.title}</Text>
-              <View style={styles.durationChip}>
-                <Text style={styles.durationText}>
+          <View style={styles.subjectGroup}>
+            {detail.subjects.map((subject, index) => (
+              <PressableScale
+                key={subject.letter}
+                style={[
+                  styles.subjectRow,
+                  index > 0 && styles.subjectRowDivider,
+                ]}
+                onPress={() => console.log(`Klik na predmet ${subject.letter}`)}
+                accessibilityRole="button"
+                accessibilityLabel={`${subject.letter}. ${subject.title}, ${subject.amount} ${unit?.short}`}
+              >
+                <Text style={styles.subjectLetter}>{subject.letter}</Text>
+                <Text style={styles.subjectTitle}>{subject.title}</Text>
+                <Text style={styles.duration}>
                   {subject.amount} {unit?.short}
                 </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+              </PressableScale>
+            ))}
+          </View>
 
           {detail.note ? <Text style={styles.note}>{detail.note}</Text> : null}
 
@@ -100,17 +88,18 @@ export default function CourseDetailScreen({
               Kurz si zakúpite na našom webe. Po zakúpení dostanete email s
               odkazom na aktiváciu účtu.
             </Text>
-            <TouchableOpacity
+            <PressableScale
               style={styles.ctaButton}
-              activeOpacity={0.85}
               onPress={() => WebBrowser.openBrowserAsync(detail.webUrl)}
               accessibilityRole="button"
             >
-              <Text style={styles.ctaButtonText}>
-                Pokračovať na safecore.sk
-              </Text>
-              <Ionicons name="open-outline" size={18} color={Palette.text} />
-            </TouchableOpacity>
+              <Text style={styles.ctaButtonText}>Pokračovať na safecore.sk</Text>
+              <Ionicons
+                name="open-outline"
+                size={18}
+                color={Palette.onPrimary}
+              />
+            </PressableScale>
           </View>
         </ScrollView>
       )}
@@ -120,154 +109,142 @@ export default function CourseDetailScreen({
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Palette.background },
-  topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  topTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
-    color: Palette.text,
-  },
-  scrollContent: { padding: 20, paddingBottom: 40 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 40 },
   empty: { flex: 1, alignItems: "center", justifyContent: "center" },
-  emptyText: { fontSize: 16, color: Palette.textSecondary },
+  emptyText: {
+    fontFamily: Font.body,
+    fontSize: 16,
+    color: Palette.textSecondary,
+  },
   hero: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    marginBottom: 20,
+    alignItems: "stretch",
+    gap: 16,
+    marginBottom: 16,
   },
-  badge: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: Palette.primary,
+  plate: {
+    width: 104,
+    height: 104,
+    borderRadius: 20,
+    backgroundColor: Palette.surfaceRaised,
+    borderLeftWidth: 4,
+    borderLeftColor: Palette.primary,
     alignItems: "center",
     justifyContent: "center",
   },
-  badgeText: { fontSize: 24, fontWeight: "bold", color: Palette.text },
+  letter: {
+    fontFamily: Font.displayBold,
+    fontSize: 80,
+    lineHeight: 88,
+    color: Palette.textButtonSecondary,
+  },
   subtitle: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: "600",
+    alignSelf: "center",
+    fontFamily: Font.bodyMedium,
+    fontSize: 16,
+    lineHeight: 22,
     color: Palette.primary,
-    lineHeight: 20,
   },
-  statsRow: { flexDirection: "row", gap: 12, marginBottom: 12 },
-  stat: {
-    flex: 1,
-    alignItems: "center",
+  statsCard: {
+    flexDirection: "row",
     backgroundColor: Palette.surface,
-    borderWidth: 1,
-    borderColor: Palette.border,
-    borderRadius: 12,
-    paddingVertical: 16,
+    borderRadius: 18,
+    paddingVertical: 18,
+    marginBottom: 12,
   },
-  statValue: { fontSize: 26, fontWeight: "bold", color: Palette.text },
+  stat: { flex: 1, alignItems: "center", paddingHorizontal: 8 },
+  statDivider: { width: 1, backgroundColor: Palette.border },
+  statValue: {
+    fontFamily: Font.displayBold,
+    fontSize: 34,
+    lineHeight: 38,
+    color: Palette.text,
+  },
   statLabel: {
-    fontSize: 13,
+    fontFamily: Font.body,
+    fontSize: 14,
     color: Palette.textSecondary,
-    marginTop: 2,
     textAlign: "center",
-    paddingHorizontal: 8,
   },
-  lawCard: {
+  lawRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    backgroundColor: Palette.surface,
-    borderWidth: 1,
-    borderColor: Palette.border,
-    borderRadius: 12,
-    padding: 16,
+    gap: 10,
+    paddingHorizontal: 4,
     marginBottom: 28,
   },
   lawText: {
     flex: 1,
-    fontSize: 14,
+    fontFamily: Font.body,
+    fontSize: 15,
+    lineHeight: 21,
     color: Palette.textSecondary,
-    lineHeight: 20,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: Font.displayBold,
+    fontSize: 22,
     color: Palette.text,
-    marginBottom: 14,
-  },
-  subjectCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    backgroundColor: Palette.surface,
-    borderWidth: 1,
-    borderColor: Palette.border,
-    borderRadius: 12,
-    padding: 14,
     marginBottom: 12,
   },
-  subjectBadge: {
-    width: 36,
-    height: 36,
+  subjectGroup: {
+    backgroundColor: Palette.surface,
     borderRadius: 18,
-    backgroundColor: Palette.primaryMuted,
-    borderWidth: 1,
-    borderColor: Palette.primaryBorder,
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
   },
-  subjectBadgeText: {
-    fontSize: 15,
-    fontWeight: "bold",
+  subjectRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  subjectRowDivider: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Palette.border,
+  },
+  subjectLetter: {
+    width: 22,
+    fontFamily: Font.displayBold,
+    fontSize: 22,
     color: Palette.primary,
   },
   subjectTitle: {
     flex: 1,
-    fontSize: 15,
+    fontFamily: Font.body,
+    fontSize: 16,
+    lineHeight: 21,
     color: Palette.text,
-    lineHeight: 20,
   },
-  durationChip: {
-    backgroundColor: Palette.primarySoft,
-    borderRadius: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+  duration: {
+    fontFamily: Font.bodyMedium,
+    fontSize: 14,
+    color: Palette.textSecondary,
   },
-  durationText: { fontSize: 12, fontWeight: "600", color: Palette.primary },
   note: {
+    fontFamily: Font.body,
     fontSize: 14,
     color: Palette.textSecondary,
     lineHeight: 20,
-    marginTop: 4,
+    marginTop: 12,
   },
   cta: {
-    borderTopWidth: 1,
-    borderTopColor: Palette.border,
-    marginTop: 16,
-    paddingTop: 24,
+    marginTop: 28,
+    backgroundColor: Palette.surfaceRaised,
+    borderRadius: 22,
+    padding: 20,
   },
   ctaTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: Font.displayBold,
+    fontSize: 22,
     color: Palette.text,
     marginBottom: 6,
   },
   ctaText: {
-    fontSize: 14,
-    color: Palette.textSecondary,
-    lineHeight: 20,
+    fontFamily: Font.body,
+    fontSize: 15,
+    color: Palette.textButtonSecondary,
+    lineHeight: 21,
     marginBottom: 16,
   },
   ctaButton: {
@@ -276,8 +253,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     backgroundColor: Palette.primary,
-    borderRadius: 12,
-    paddingVertical: 14,
+    borderRadius: 14,
+    height: 52,
   },
-  ctaButtonText: { fontSize: 16, fontWeight: "600", color: Palette.text },
+  ctaButtonText: {
+    fontFamily: Font.bodySemiBold,
+    fontSize: 17,
+    color: Palette.onPrimary,
+  },
 });

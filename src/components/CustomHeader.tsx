@@ -1,11 +1,11 @@
 import { Palette } from "@/constants/palette";
+import { Font } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface CustomHeaderProps {
   title: string;
-  subtitle?: string;
   description?: string;
   showNotification?: boolean;
   onNotificationPress?: () => void;
@@ -13,13 +13,10 @@ interface CustomHeaderProps {
 
 export default function CustomHeader({
   title,
-  subtitle,
   description,
   showNotification = true,
   onNotificationPress,
 }: CustomHeaderProps) {
-  const hasTitleBlock = Boolean(title || subtitle || description);
-
   return (
     <View style={styles.headerContainer}>
       <View style={styles.brandRow}>
@@ -27,10 +24,10 @@ export default function CustomHeader({
           <Image
             source={require("../../assets/logo/logo-dark.png")}
             style={styles.logo}
-            contentFit="cover"
+            contentFit="contain"
             accessibilityLabel="SafeCore logo"
           />
-          <Text style={styles.brandText}>SafeCore mobile</Text>
+          <Text style={styles.brandText}>SafeCore</Text>
         </View>
 
         {showNotification && (
@@ -38,6 +35,8 @@ export default function CustomHeader({
             style={styles.iconButton}
             onPress={onNotificationPress}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Upozornenia"
           >
             <Ionicons
               name="notifications-outline"
@@ -49,13 +48,8 @@ export default function CustomHeader({
         )}
       </View>
 
-      {hasTitleBlock && (
-        <View style={styles.textContainer}>
-          {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-          <Text style={styles.title}>{title}</Text>
-          {description && <Text style={styles.description}>{description}</Text>}
-        </View>
-      )}
+      <Text style={styles.title}>{title}</Text>
+      {description && <Text style={styles.description}>{description}</Text>}
     </View>
   );
 }
@@ -63,72 +57,59 @@ export default function CustomHeader({
 const styles = StyleSheet.create({
   headerContainer: {
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 16,
-    backgroundColor: Palette.background,
-    borderBottomWidth: 1,
-    borderBottomColor: Palette.surface,
+    paddingTop: 8,
+    paddingBottom: 12,
   },
   brandRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 20,
   },
   brand: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 8,
   },
   logo: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 2,
-    borderColor: Palette.logoRing,
+    width: 40,
+    height: 40,
   },
   brandText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: Palette.text,
-  },
-  textContainer: {
-    marginTop: 16,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: Palette.textSecondary,
-    marginBottom: 2,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
+    fontFamily: Font.displayBold,
+    fontSize: 20,
+    color: Palette.textButtonSecondary,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
+    fontFamily: Font.displayBold,
+    fontSize: 32,
+    lineHeight: 36,
     color: Palette.text,
   },
   description: {
-    fontSize: 14,
+    fontFamily: Font.body,
+    fontSize: 16,
+    lineHeight: 22,
     color: Palette.textSecondary,
     marginTop: 4,
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: Palette.surface,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: Palette.border,
-    position: "relative",
   },
   badge: {
     position: "absolute",
-    top: 8,
-    right: 8,
+    top: 11,
+    right: 12,
     width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: Palette.primary,
+    borderWidth: 1.5,
+    borderColor: Palette.surface,
   },
 });

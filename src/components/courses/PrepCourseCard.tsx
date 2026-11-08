@@ -1,6 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 
+import PressableScale from "@/components/ui/PressableScale";
 import { Palette } from "@/constants/palette";
+import { Font } from "@/constants/typography";
 import type { PrepCourse } from "@/types/course";
 
 type PrepCourseCardProps = {
@@ -8,68 +11,80 @@ type PrepCourseCardProps = {
   onPress?: () => void;
 };
 
+/** Karta kurzu ako doklad: vľavo veľké písmeno typu preukazu, vpravo text. */
 export default function PrepCourseCard({
   course,
   onPress,
 }: PrepCourseCardProps) {
   return (
-    <TouchableOpacity
+    <PressableScale
       style={styles.card}
-      activeOpacity={0.85}
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${course.title}. ${course.subtitle}`}
     >
-      <View style={styles.titleRow}>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>{course.badge}</Text>
-        </View>
-        <Text style={styles.title}>{course.title}</Text>
+      <View style={styles.plate}>
+        <Text style={styles.letter}>{course.badge}</Text>
       </View>
 
-      <Text style={styles.subtitle}>{course.subtitle}</Text>
-      {course.description ? (
-        <Text style={styles.description}>{course.description}</Text>
-      ) : null}
-    </TouchableOpacity>
+      <View style={styles.body}>
+        <Text style={styles.title}>{course.title}</Text>
+        <Text style={styles.subtitle}>{course.subtitle}</Text>
+        {course.description ? (
+          <Text style={styles.description}>{course.description}</Text>
+        ) : null}
+      </View>
+
+      <Ionicons name="chevron-forward" size={18} color={Palette.icon} />
+    </PressableScale>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Palette.surface,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: Palette.border,
-  },
-  titleRow: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    marginBottom: 12,
-  },
-  badge: {
-    width: 44,
-    height: 44,
+    alignItems: "stretch",
+    backgroundColor: Palette.surface,
     borderRadius: 22,
-    backgroundColor: Palette.primary,
+    padding: 10,
+    paddingRight: 16,
+    marginBottom: 12,
+    gap: 14,
+  },
+  plate: {
+    width: 84,
+    borderRadius: 14,
+    backgroundColor: Palette.surfaceRaised,
     alignItems: "center",
     justifyContent: "center",
+    borderLeftWidth: 3,
+    borderLeftColor: Palette.primary,
   },
-  badgeText: { fontSize: 20, fontWeight: "bold", color: Palette.text },
-  title: { flex: 1, fontSize: 20, fontWeight: "bold", color: Palette.text },
+  letter: {
+    fontFamily: Font.displayBold,
+    fontSize: 60,
+    lineHeight: 66,
+    color: Palette.textButtonSecondary,
+  },
+  body: { flex: 1, paddingVertical: 8 },
+  title: {
+    fontFamily: Font.displayBold,
+    fontSize: 22,
+    lineHeight: 25,
+    color: Palette.text,
+    marginBottom: 6,
+  },
   subtitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: Palette.primary,
+    fontFamily: Font.bodyMedium,
+    fontSize: 15,
     lineHeight: 20,
+    color: Palette.primary,
   },
   description: {
+    fontFamily: Font.body,
     fontSize: 14,
-    color: Palette.textSecondary,
     lineHeight: 20,
+    color: Palette.textSecondary,
     marginTop: 8,
   },
 });

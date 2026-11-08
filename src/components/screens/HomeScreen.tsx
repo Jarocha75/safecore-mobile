@@ -11,14 +11,15 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <CustomHeader
-        title="Vitaj v SafeCore 👋"
-        description="Tvoja profesionálna príprava na skúšky"
+        title="Vitaj späť"
+        description="Pokračuj tam, kde si skončil."
         onNotificationPress={() => console.log("Klik na notifikácie")}
       />
 
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
       >
         <ContinueStudyCard
           progress={LAST_STUDY}
@@ -49,6 +50,8 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.background,
   },
   contentContainer: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 32,
   },
 });

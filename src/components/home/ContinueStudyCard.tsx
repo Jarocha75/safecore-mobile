@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import PressableScale from "@/components/ui/PressableScale";
 import { Palette } from "@/constants/palette";
+import { Font } from "@/constants/typography";
 import type { StudyProgress } from "@/types/study";
 
 type ContinueStudyCardProps = {
@@ -17,88 +19,97 @@ export default function ContinueStudyCard({
   const percent = Math.round((questionNumber / totalQuestions) * 100);
 
   return (
-    <TouchableOpacity
+    <PressableScale
       style={styles.card}
-      activeOpacity={0.85}
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`Pokračuj v štúdiu. ${courseTitle}, ${testTitle}, otázka ${questionNumber} z ${totalQuestions}`}
     >
-      <Text style={styles.eyebrow}>POKRAČUJ V ŠTÚDIU</Text>
-      <Text style={styles.course}>{courseTitle}</Text>
-      <Text style={styles.test}>{testTitle}</Text>
+      <View style={styles.topRow}>
+        <View style={styles.texts}>
+          <Text style={styles.course}>{courseTitle}</Text>
+          <Text style={styles.test}>{testTitle}</Text>
+        </View>
+        <View style={styles.play}>
+          <Ionicons name="play" size={20} color={Palette.onPrimary} />
+        </View>
+      </View>
 
       <View style={styles.progressTrack}>
         <View style={[styles.progressFill, { width: `${percent}%` }]} />
       </View>
-      <Text style={styles.progressText}>
-        Otázka {questionNumber} z {totalQuestions} · {percent} %
-      </Text>
-
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>Pokračovať</Text>
-        <Ionicons name="arrow-forward" size={18} color={Palette.text} />
+      <View style={styles.progressRow}>
+        <Text style={styles.progressText}>
+          Otázka {questionNumber} z {totalQuestions}
+        </Text>
+        <Text style={styles.percent}>{percent} %</Text>
       </View>
-    </TouchableOpacity>
+    </PressableScale>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Palette.primaryMuted,
-    borderRadius: 16,
+    backgroundColor: Palette.surfaceRaised,
+    borderRadius: 22,
     padding: 20,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: Palette.primaryBorder,
   },
-  eyebrow: {
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 1,
-    color: Palette.primary,
-    marginBottom: 8,
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    marginBottom: 20,
   },
+  texts: { flex: 1 },
   course: {
-    fontSize: 22,
-    fontWeight: "bold",
+    fontFamily: Font.displayBold,
+    fontSize: 26,
+    lineHeight: 28,
     color: Palette.text,
     marginBottom: 4,
   },
   test: {
-    fontSize: 14,
+    fontFamily: Font.body,
+    fontSize: 15,
+    lineHeight: 20,
     color: Palette.textButtonSecondary,
-    marginBottom: 16,
+  },
+  play: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: Palette.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 3,
   },
   progressTrack: {
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Palette.border,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Palette.background,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%",
-    borderRadius: 4,
+    borderRadius: 3,
     backgroundColor: Palette.primary,
+  },
+  progressRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
   },
   progressText: {
-    fontSize: 12,
+    fontFamily: Font.body,
+    fontSize: 14,
     color: Palette.textSecondary,
-    marginTop: 8,
-    marginBottom: 16,
   },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    backgroundColor: Palette.primary,
-    borderRadius: 12,
-    paddingVertical: 12,
-  },
-  buttonText: {
+  percent: {
+    fontFamily: Font.displayBold,
     fontSize: 16,
-    fontWeight: "600",
-    color: Palette.text,
+    color: Palette.primary,
   },
 });

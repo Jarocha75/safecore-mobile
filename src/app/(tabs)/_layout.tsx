@@ -1,7 +1,29 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import type { ColorValue } from "react-native";
+import type { ComponentProps } from "react";
 
 import { Palette } from "@/constants/palette";
+import { Font } from "@/constants/typography";
+
+type IconName = ComponentProps<typeof Ionicons>["name"];
+
+/** Aktívna záložka má plnú ikonu, neaktívna obrysovú. */
+function tabIcon(active: IconName, inactive: IconName) {
+  return function TabIcon({
+    color,
+    size,
+    focused,
+  }: {
+    color: ColorValue;
+    size: number;
+    focused: boolean;
+  }) {
+    return (
+      <Ionicons name={focused ? active : inactive} size={size} color={color as string} />
+    );
+  };
+}
 
 export default function TabsLayout() {
   return (
@@ -10,46 +32,35 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: Palette.primary,
         tabBarInactiveTintColor: Palette.icon,
+        tabBarLabelStyle: { fontFamily: Font.bodyMedium, fontSize: 12 },
         tabBarStyle: {
-          backgroundColor: Palette.background,
-          borderTopColor: Palette.surface,
+          backgroundColor: Palette.surface,
+          borderTopWidth: 0,
+          elevation: 0,
         },
+        sceneStyle: { backgroundColor: Palette.background },
       }}
     >
       <Tabs.Screen
         name="home"
-        options={{
-          title: "Domov",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color as string} />
-          ),
-        }}
+        options={{ title: "Domov", tabBarIcon: tabIcon("home", "home-outline") }}
       />
       <Tabs.Screen
         name="tests"
         options={{
           title: "Testy",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="help-circle" size={size} color={color as string} />
-          ),
+          tabBarIcon: tabIcon("help-circle", "help-circle-outline"),
         }}
       />
       <Tabs.Screen
         name="license"
-        options={{
-          title: "Preukaz",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="card" size={size} color={color as string} />
-          ),
-        }}
+        options={{ title: "Preukaz", tabBarIcon: tabIcon("card", "card-outline") }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profil",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color as string} />
-          ),
+          tabBarIcon: tabIcon("person", "person-outline"),
         }}
       />
     </Tabs>

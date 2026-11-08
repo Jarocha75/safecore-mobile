@@ -1,6 +1,7 @@
 import CourseCard from "@/components/CourseCard";
 import CustomHeader from "@/components/CustomHeader";
 import { COURSES } from "@/constants/courses";
+import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,7 +14,10 @@ export default function TestsScreen() {
         onNotificationPress={() => console.log("Notifikácie")}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.sectionDescription}>
           Vyber si kategóriu preukazu, na ktorú sa chceš pripraviť. Každý modul
           obsahuje legislatívu a cvičné testy.
@@ -39,13 +43,15 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.background,
   },
   scrollContent: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 8,
     paddingBottom: 40,
   },
   sectionDescription: {
-    fontSize: 14,
+    fontFamily: Font.body,
+    fontSize: 16,
     color: Palette.textSecondary,
     marginBottom: 20,
-    lineHeight: 20,
+    lineHeight: 23,
   },
 });

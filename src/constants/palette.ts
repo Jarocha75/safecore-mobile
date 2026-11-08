@@ -1,21 +1,29 @@
-/** Značková paleta SafeCore (tmavý motív). */
+/**
+ * Značková paleta SafeCore (tmavý motív).
+ * Odvodená z loga: podklad loga, oceľový štít a jasná modrá z nápisu.
+ */
 export const Palette = {
-  background: "#0f172a", // slate-900
-  surface: "#1e293b", // slate-800
-  border: "#334155", // slate-700
-  primary: "#3b82f6", // blue-500
-  primarySoft: "rgba(59, 130, 246, 0.1)",
-  primaryMuted: "rgba(59, 130, 246, 0.15)",
-  primaryBorder: "rgba(59, 130, 246, 0.3)",
-  success: "#10b981", // emerald-500
-  successMuted: "rgba(16, 185, 129, 0.15)",
-  successBorder: "rgba(16, 185, 129, 0.3)",
-  danger: "#ef4444", // red-500
-  dangerSoft: "rgba(239, 68, 68, 0.1)",
-  dangerBorder: "rgba(239, 68, 68, 0.3)",
+  background: "#121824", // podklad loga – logo s ním splýva
+  surface: "#1A2233", // karty a skupiny
+  surfaceRaised: "#232E45", // zvýraznená plocha (písmeno preukazu, vstupy)
+  border: "#2B3750", // jemný delič
+  primary: "#4DA3FF",
+  primarySoft: "rgba(77, 163, 255, 0.10)",
+  primaryMuted: "rgba(77, 163, 255, 0.16)",
+  primaryBorder: "rgba(77, 163, 255, 0.32)",
+  onPrimary: "#08121F", // text na primárnom tlačidle (kontrast 8:1)
+  success: "#34D399",
+  successMuted: "rgba(52, 211, 153, 0.15)",
+  successBorder: "rgba(52, 211, 153, 0.3)",
+  danger: "#F87171",
+  dangerSoft: "rgba(248, 113, 113, 0.10)",
+  dangerBorder: "rgba(248, 113, 113, 0.3)",
+  stamp: "#E3B04B", // mosadz – len pre stav platnosti / členstva
+  stampSoft: "rgba(227, 176, 75, 0.12)",
+  stampBorder: "rgba(227, 176, 75, 0.35)",
   logoRing: "rgba(80, 160, 225, 0.4)",
-  text: "#ffffff",
-  textSecondary: "#9ca3af", // gray-400
-  textButtonSecondary: "#e2e8f0", // slate-200
-  icon: "#6b7280", // gray-500
+  text: "#F4F7FB",
+  textSecondary: "#8E9BB3",
+  textButtonSecondary: "#C9D3E3", // oceľová
+  icon: "#6F7D96",
 } as const;

@@ -1,4 +1,7 @@
 import DateField from "@/components/forms/DateField";
+import ScreenTopBar from "@/components/ui/ScreenTopBar";
+import PressableScale from "@/components/ui/PressableScale";
+import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import type {
   LicenseFormConfig,
@@ -7,7 +10,6 @@ import type {
 } from "@/types/license";
 import { formatPhone } from "@/utils/phone";
 import { createLicenseSchema } from "@/validation/license";
-import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useMemo } from "react";
@@ -19,7 +21,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   type TextInputProps,
 } from "react-native";
@@ -85,18 +86,7 @@ export default function LicenseFormScreen({
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
-      <View style={styles.topBar}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-          activeOpacity={0.7}
-          accessibilityLabel="Späť"
-        >
-          <Ionicons name="chevron-back" size={22} color={Palette.text} />
-        </TouchableOpacity>
-        <Text style={styles.topTitle}>{config.title}</Text>
-        <View style={styles.backButton} />
-      </View>
+      <ScreenTopBar title={config.title} />
 
       <KeyboardAvoidingView
         style={styles.flex}
@@ -186,13 +176,12 @@ export default function LicenseFormScreen({
             )}
           />
 
-          <TouchableOpacity
+          <PressableScale
             style={styles.saveButton}
-            activeOpacity={0.8}
             onPress={() => handleSubmit(onSubmit)()}
           >
             <Text style={styles.saveText}>Uložiť</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -202,26 +191,11 @@ export default function LicenseFormScreen({
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   container: { flex: 1, backgroundColor: Palette.background },
-  topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  topTitle: { fontSize: 18, fontWeight: "bold", color: Palette.text },
   scrollContent: { padding: 20, paddingBottom: 40 },
   field: { marginBottom: 18 },
   label: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontFamily: Font.bodySemiBold,
+    fontSize: 15,
     color: Palette.textButtonSecondary,
     marginBottom: 8,
   },
@@ -229,26 +203,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Palette.surface,
-    borderWidth: 1,
-    borderColor: Palette.border,
-    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: "transparent",
+    borderRadius: 14,
     paddingHorizontal: 16,
   },
-  prefix: { fontSize: 16, color: Palette.textSecondary, marginRight: 2 },
+  prefix: { fontFamily: Font.body, fontSize: 17, color: Palette.textSecondary, marginRight: 2 },
   inputText: {
     flex: 1,
-    paddingVertical: 14,
-    fontSize: 16,
+    paddingVertical: 15,
+    fontFamily: Font.body,
+    fontSize: 17,
     color: Palette.text,
   },
   inputError: { borderColor: Palette.danger },
-  errorText: { marginTop: 6, fontSize: 13, color: Palette.danger },
+  errorText: { marginTop: 6, fontFamily: Font.body, fontSize: 14, color: Palette.danger },
   saveButton: {
     marginTop: 8,
     backgroundColor: Palette.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
+    borderRadius: 14,
+    height: 54,
+    justifyContent: "center",
     alignItems: "center",
   },
-  saveText: { fontSize: 16, fontWeight: "bold", color: Palette.text },
+  saveText: { fontFamily: Font.bodySemiBold, fontSize: 17, color: Palette.onPrimary },
 });

@@ -1,9 +1,11 @@
 import CustomHeader from "@/components/CustomHeader";
+import PressableScale from "@/components/ui/PressableScale";
+import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import type { LicenseCardItem } from "@/types/license";
 import { router } from "expo-router";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const LICENSES: LicenseCardItem[] = [
@@ -35,20 +37,24 @@ export default function LicenseScreen() {
         onNotificationPress={() => console.log("Notifikácie")}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.description}>
           Tu si môžeš overiť platnosť svojho preukazu a nastaviť upozornenie,
           aby ti neskončila bez povšimnutia. Vyber si typ preukazu.
         </Text>
 
         {LICENSES.map((license) => (
-          <TouchableOpacity
+          <PressableScale
             key={license.id}
             style={styles.card}
-            activeOpacity={0.8}
             onPress={() => router.push(license.href)}
+            accessibilityRole="button"
+            accessibilityLabel={license.title}
           >
-            {license.icon}
+            <View style={styles.iconBox}>{license.icon}</View>
             <Text style={styles.cardTitle}>{license.title}</Text>
             <Ionicons
               name="chevron-forward"
@@ -56,7 +62,7 @@ export default function LicenseScreen() {
               color={Palette.icon}
               style={styles.chevron}
             />
-          </TouchableOpacity>
+          </PressableScale>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -69,13 +75,15 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.background,
   },
   scrollContent: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 8,
     paddingBottom: 40,
   },
   description: {
-    fontSize: 14,
+    fontFamily: Font.body,
+    fontSize: 16,
     color: Palette.textSecondary,
-    lineHeight: 20,
+    lineHeight: 23,
     marginBottom: 20,
   },
   card: {
@@ -83,16 +91,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 14,
     backgroundColor: Palette.surface,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: Palette.border,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 10,
+  },
+  iconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    backgroundColor: Palette.surfaceRaised,
+    alignItems: "center",
+    justifyContent: "center",
   },
   cardTitle: {
     flex: 1,
+    fontFamily: Font.bodySemiBold,
     fontSize: 18,
-    fontWeight: "bold",
     color: Palette.text,
   },
   chevron: {
