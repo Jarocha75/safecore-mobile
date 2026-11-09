@@ -1,5 +1,6 @@
 import CustomHeader from "@/components/CustomHeader";
 import PressableScale from "@/components/ui/PressableScale";
+import { CardStyles } from "@/constants/card-styles";
 import { Font } from "@/constants/typography";
 import { Palette } from "@/constants/palette";
 import { LICENSES } from "@/constants/licenses";
@@ -27,12 +28,12 @@ export default function LicenseScreen() {
         {LICENSES.map((license) => (
           <PressableScale
             key={license.id}
-            style={styles.card}
+            style={CardStyles.listCard}
             onPress={() => router.push(license.href)}
             accessibilityRole="button"
             accessibilityLabel={license.title}
           >
-            <View style={styles.iconBox}>{license.icon}</View>
+            <View style={CardStyles.iconBox}>{license.icon}</View>
             <Text style={styles.cardTitle}>{license.title}</Text>
             <Ionicons
               name="chevron-forward"
@@ -63,23 +64,6 @@ const styles = StyleSheet.create({
     color: Palette.textSecondary,
     lineHeight: 23,
     marginBottom: 20,
-  },
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    backgroundColor: Palette.surface,
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 10,
-  },
-  iconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    backgroundColor: Palette.surfaceRaised,
-    alignItems: "center",
-    justifyContent: "center",
   },
   cardTitle: {
     flex: 1,

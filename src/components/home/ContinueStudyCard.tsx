@@ -16,7 +16,10 @@ export default function ContinueStudyCard({
   onPress,
 }: ContinueStudyCardProps) {
   const { courseTitle, testTitle, questionNumber, totalQuestions } = progress;
-  const percent = Math.round((questionNumber / totalQuestions) * 100);
+  const percent =
+    totalQuestions > 0
+      ? Math.min(100, Math.round((questionNumber / totalQuestions) * 100))
+      : 0;
 
   return (
     <PressableScale

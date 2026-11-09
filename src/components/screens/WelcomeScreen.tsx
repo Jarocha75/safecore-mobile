@@ -13,7 +13,7 @@ export default function WelcomeScreen() {
       <View style={styles.content}>
         {/* Priehľadné logo – nemá vlastný podklad, ktorý by presvital */}
         <Image
-          source={require("../../../assets/logo/logo-dark-removebg-preview.png")}
+          source={require("@/assets/logo/logo-dark-removebg-preview.png")}
           style={styles.logo}
           contentFit="contain"
           accessibilityLabel="SafeCore logo"

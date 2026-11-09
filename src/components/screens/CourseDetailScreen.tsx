@@ -84,7 +84,7 @@ export default function CourseDetailScreen({
           <View style={styles.cta}>
             <Text style={styles.ctaTitle}>Pripravený začať štúdium?</Text>
             <Text style={styles.ctaText}>
-              Kurz si zakúpite na našom webe. Po zakúpení dostanete email s
+              Kurz si zakúpiš na našom webe. Po zakúpení dostaneš email s
               odkazom na aktiváciu účtu.
             </Text>
             <PressableScale
@@ -99,7 +99,7 @@ export default function CourseDetailScreen({
               }}
               accessibilityRole="link"
               accessibilityLabel="Pokračovať na safecore.sk"
-              accessibilityHint="Otvorí webovú stránku, kde si kurz zakúpite"
+              accessibilityHint="Otvorí webovú stránku, kde si kurz zakúpiš"
             >
               <Text style={styles.ctaButtonText}>Pokračovať na safecore.sk</Text>
               <Ionicons

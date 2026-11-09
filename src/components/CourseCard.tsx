@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import PressableScale from "@/components/ui/PressableScale";
+import { CardStyles } from "@/constants/card-styles";
 import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
 
@@ -22,12 +23,12 @@ export default function CourseCard({
 }: CourseCardProps) {
   return (
     <PressableScale
-      style={styles.card}
+      style={CardStyles.listCard}
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${title}. ${description}`}
     >
-      <View style={styles.iconContainer}>{icon}</View>
+      <View style={CardStyles.iconBox}>{icon}</View>
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
@@ -38,24 +39,6 @@ export default function CourseCard({
 }
 
 const styles = StyleSheet.create({
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Palette.surface,
-    borderRadius: 18,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    marginBottom: 10,
-    gap: 14,
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    backgroundColor: Palette.surfaceRaised,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   content: {
     flex: 1,
   },
