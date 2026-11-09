@@ -21,6 +21,8 @@ type DateFieldProps = {
   onChange: (date: Date) => void;
   error?: string;
   placeholder?: string;
+  minimumDate?: Date;
+  maximumDate?: Date;
 };
 
 export default function DateField({
@@ -29,11 +31,16 @@ export default function DateField({
   onChange,
   error,
   placeholder = "Vyber dátum",
+  minimumDate,
+  maximumDate,
 }: DateFieldProps) {
   const [iosOpen, setIosOpen] = useState(false);
 
-  const handleChange = (_: DateTimePickerEvent, date?: Date) => {
-    if (date) onChange(date);
+  const handleChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (event.type === "dismissed" || !date) return;
+    onChange(date);
+    // Po výbere dňa sa inline kalendár na iOS zatvorí.
+    setIosOpen(false);
   };
 
   const open = () => {
@@ -41,6 +48,8 @@ export default function DateField({
       DateTimePickerAndroid.open({
         value: value ?? new Date(),
         mode: "date",
+        minimumDate,
+        maximumDate,
         onChange: handleChange,
       });
     } else {
@@ -55,6 +64,10 @@ export default function DateField({
         style={[styles.input, error ? styles.inputError : null]}
         activeOpacity={0.8}
         onPress={open}
+        accessibilityRole="button"
+        accessibilityLabel={label}
+        accessibilityValue={{ text: value ? formatDate(value) : placeholder }}
+        accessibilityState={{ expanded: Platform.OS === "ios" ? iosOpen : undefined }}
       >
         <Text style={value ? styles.value : styles.placeholder}>
           {value ? formatDate(value) : placeholder}
@@ -71,6 +84,8 @@ export default function DateField({
             display="inline"
             themeVariant="dark"
             accentColor={Palette.primary}
+            minimumDate={minimumDate}
+            maximumDate={maximumDate}
             onChange={handleChange}
           />
         </View>

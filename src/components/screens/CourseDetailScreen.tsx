@@ -6,7 +6,7 @@ import { PREP_COURSES } from "@/constants/prep-courses";
 import { Font } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type CourseDetailScreenProps = {
@@ -89,8 +89,17 @@ export default function CourseDetailScreen({
             </Text>
             <PressableScale
               style={styles.ctaButton}
-              onPress={() => WebBrowser.openBrowserAsync(detail.webUrl)}
-              accessibilityRole="button"
+              onPress={() => {
+                WebBrowser.openBrowserAsync(detail.webUrl).catch(() => {
+                  Alert.alert(
+                    "Stránku sa nepodarilo otvoriť",
+                    "Skús to prosím znova alebo navštív safecore.sk v prehliadači.",
+                  );
+                });
+              }}
+              accessibilityRole="link"
+              accessibilityLabel="Pokračovať na safecore.sk"
+              accessibilityHint="Otvorí webovú stránku, kde si kurz zakúpite"
             >
               <Text style={styles.ctaButtonText}>Pokračovať na safecore.sk</Text>
               <Ionicons

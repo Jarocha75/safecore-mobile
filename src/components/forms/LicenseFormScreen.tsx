@@ -55,6 +55,14 @@ export default function LicenseFormScreen({
   config: LicenseFormConfig;
 }) {
   const schema = useMemo(() => createLicenseSchema(config), [config]);
+  // Platnosť preukazu: od dnešného dňa najviac 20 rokov dopredu.
+  const { minDate, maxDate } = useMemo(() => {
+    const min = new Date();
+    min.setHours(0, 0, 0, 0);
+    const max = new Date(min);
+    max.setFullYear(max.getFullYear() + 20);
+    return { minDate: min, maxDate: max };
+  }, []);
 
   const {
     control,
@@ -150,6 +158,8 @@ export default function LicenseFormScreen({
                 label="Dátum platnosti do"
                 value={value}
                 onChange={onChange}
+                minimumDate={minDate}
+                maximumDate={maxDate}
                 error={errors.validUntil?.message}
               />
             )}
@@ -178,6 +188,8 @@ export default function LicenseFormScreen({
           <PressableScale
             style={styles.saveButton}
             onPress={() => handleSubmit(onSubmit)()}
+            accessibilityRole="button"
+            accessibilityLabel="Uložiť"
           >
             <Text style={styles.saveText}>Uložiť</Text>
           </PressableScale>
