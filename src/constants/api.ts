@@ -10,4 +10,9 @@ export const API_TIMEOUT_MS = 15_000;
 export const ApiPath = {
   login: "/api/mobile/login",
   me: "/api/mobile/me",
+  courseTests: (courseId: string) =>
+    `/api/mobile/courses/${encodeURIComponent(courseId)}/tests`,
+  test: (testId: string) => `/api/mobile/tests/${encodeURIComponent(testId)}`,
+  testResults: (testId: string) =>
+    `/api/mobile/tests/${encodeURIComponent(testId)}/results`,
 } as const;

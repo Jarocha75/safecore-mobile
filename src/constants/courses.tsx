@@ -1,13 +1,17 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import type { ReactNode } from "react";
 
 import { Palette } from "@/constants/palette";
-import type { Course } from "@/types/course";
+import type { CourseType } from "@/types/auth";
 
 const ICON_SIZE = 28;
 
-export const COURSES: Course[] = [
-  {
-    id: "zbrojny-preukaz",
+/** Ikona a popis karty kurzu podľa typu kurzu z API (názov kurzu prichádza zo servera). */
+export const COURSE_TYPE_META: Record<
+  CourseType,
+  { icon: ReactNode; description: string }
+> = {
+  Z: {
     icon: (
       <MaterialCommunityIcons
         name="pistol"
@@ -15,21 +19,16 @@ export const COURSES: Course[] = [
         color={Palette.primary}
       />
     ),
-    title: "Zbrojný preukaz",
     description: "Skupiny A, B, C, D, E – Testy a legislatíva",
   },
-  {
-    id: "preukaz-s",
+  S: {
     icon: (
       <Ionicons name="lock-closed" size={ICON_SIZE} color={Palette.primary} />
     ),
-    title: "Preukaz typu S",
     description: "Strážna služba a odborná príprava",
   },
-  {
-    id: "preukaz-p",
+  P: {
     icon: <Ionicons name="business" size={ICON_SIZE} color={Palette.primary} />,
-    title: "Preukaz typu P",
     description: "Fyzická ochrana a detektívna služba",
   },
-];
+};
