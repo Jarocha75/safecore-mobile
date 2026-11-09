@@ -1,4 +1,5 @@
 import DateField from "@/components/forms/DateField";
+import Field from "@/components/forms/Field";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import PressableScale from "@/components/ui/PressableScale";
 import { Font } from "@/constants/typography";
@@ -20,34 +21,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  View,
-  type TextInputProps,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-type FieldProps = TextInputProps & {
-  label: string;
-  error?: string;
-  prefix?: string;
-};
-
-function Field({ label, error, prefix, ...inputProps }: FieldProps) {
-  return (
-    <View style={styles.field}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={[styles.inputRow, error ? styles.inputError : null]}>
-        {prefix ? <Text style={styles.prefix}>{prefix}</Text> : null}
-        <TextInput
-          {...inputProps}
-          style={styles.inputText}
-          placeholderTextColor={Palette.icon}
-        />
-      </View>
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-    </View>
-  );
-}
 
 export default function LicenseFormScreen({
   config,
@@ -203,32 +178,6 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   container: { flex: 1, backgroundColor: Palette.background },
   scrollContent: { padding: 20, paddingBottom: 40 },
-  field: { marginBottom: 18 },
-  label: {
-    fontFamily: Font.bodySemiBold,
-    fontSize: 15,
-    color: Palette.textButtonSecondary,
-    marginBottom: 8,
-  },
-  inputRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Palette.surface,
-    borderWidth: 1.5,
-    borderColor: "transparent",
-    borderRadius: 14,
-    paddingHorizontal: 16,
-  },
-  prefix: { fontFamily: Font.body, fontSize: 17, color: Palette.textSecondary, marginRight: 2 },
-  inputText: {
-    flex: 1,
-    paddingVertical: 15,
-    fontFamily: Font.body,
-    fontSize: 17,
-    color: Palette.text,
-  },
-  inputError: { borderColor: Palette.danger },
-  errorText: { marginTop: 6, fontFamily: Font.body, fontSize: 14, color: Palette.danger },
   saveButton: {
     marginTop: 8,
     backgroundColor: Palette.primary,

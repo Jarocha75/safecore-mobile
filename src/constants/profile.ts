@@ -1,11 +1,4 @@
-import type { ProfileMenuItemData, ProfileUser } from "@/types/profile";
-
-/** Ukážkové údaje. Po pripojení API sa nahradia dátami prihláseného používateľa. */
-export const PROFILE_USER: ProfileUser = {
-  name: "Ján Novák",
-  email: "jan.novak@example.com",
-  membership: "Pro členstvo (Aktívne)",
-};
+import type { ProfileMenuItemData } from "@/types/profile";
 
 export const SETTINGS_MENU: ProfileMenuItemData[] = [
   { id: "notifications", label: "Notifikácie", icon: "notifications-outline" },

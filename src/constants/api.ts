@@ -1,0 +1,13 @@
+/**
+ * Adresa webového API (Next.js). Nastavuje sa v `.env.local` ako EXPO_PUBLIC_API_URL,
+ * napr. http://192.168.1.54:3000 pre lokálny web (telefón nevidí `localhost` počítača).
+ * Premenná sa musí čítať statickým zápisom, inak ju Expo nenahradí.
+ */
+export const API_URL = process.env.EXPO_PUBLIC_API_URL?.replace(/\/$/, "") ?? "";
+
+export const API_TIMEOUT_MS = 15_000;
+
+export const ApiPath = {
+  login: "/api/mobile/login",
+  me: "/api/mobile/me",
+} as const;

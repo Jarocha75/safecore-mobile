@@ -1,13 +1,25 @@
 import CustomHeader from "@/components/CustomHeader";
 import ProfileMenuGroup from "@/components/profile/ProfileMenuGroup";
 import { Palette } from "@/constants/palette";
-import { ABOUT_MENU, PROFILE_USER, SETTINGS_MENU } from "@/constants/profile";
+import { ABOUT_MENU, SETTINGS_MENU } from "@/constants/profile";
+import { useSession } from "@/context/SessionContext";
 import { Font } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
+  const { session, signOut } = useSession();
+  const user = session?.user;
+  const courseTitles = session?.courses.map((c) => c.title).join(", ");
+
+  const confirmSignOut = () => {
+    Alert.alert("Odhlásiť sa", "Naozaj sa chceš odhlásiť?", [
+      { text: "Zrušiť", style: "cancel" },
+      { text: "Odhlásiť sa", style: "destructive", onPress: () => void signOut() },
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <CustomHeader
@@ -23,11 +35,13 @@ export default function ProfileScreen() {
             <Ionicons name="person" size={32} color={Palette.primary} />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{PROFILE_USER.name}</Text>
-            <Text style={styles.userEmail}>{PROFILE_USER.email}</Text>
-            <View style={styles.badgeContainer}>
-              <Text style={styles.badgeText}>{PROFILE_USER.membership}</Text>
-            </View>
+            <Text style={styles.userName}>{user?.name ?? user?.email}</Text>
+            <Text style={styles.userEmail}>{user?.email}</Text>
+            {courseTitles ? (
+              <View style={styles.badgeContainer}>
+                <Text style={styles.badgeText}>{courseTitles}</Text>
+              </View>
+            ) : null}
           </View>
         </View>
 
@@ -37,13 +51,11 @@ export default function ProfileScreen() {
         <Text style={styles.sectionTitle}>O aplikácii</Text>
         <ProfileMenuGroup items={ABOUT_MENU} />
 
-        {/* Odhlásenie sa pripojí po pridaní prihlasovania. */}
         <TouchableOpacity
           style={styles.logoutButton}
-          disabled
+          onPress={confirmSignOut}
           accessibilityRole="button"
           accessibilityLabel="Odhlásiť sa"
-          accessibilityState={{ disabled: true }}
         >
           <Ionicons name="log-out-outline" size={20} color={Palette.danger} />
           <Text style={styles.logoutText}>Odhlásiť sa</Text>

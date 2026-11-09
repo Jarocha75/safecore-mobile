@@ -30,18 +30,13 @@ export default function WelcomeScreen() {
         <PressableScale
           style={styles.primaryButton}
           accessibilityRole="button"
-          onPress={() => router.replace("/home")} // TODO: registrácia
+          onPress={() => router.push("/login")}
         >
-          <Text style={styles.primaryButtonText}>Vytvoriť účet</Text>
+          <Text style={styles.primaryButtonText}>Prihlásiť sa</Text>
         </PressableScale>
-
-        <PressableScale
-          style={styles.secondaryButton}
-          accessibilityRole="button"
-          onPress={() => router.replace("/home")} // TODO: prihlásenie
-        >
-          <Text style={styles.secondaryButtonText}>Už mám účet</Text>
-        </PressableScale>
+        <Text style={styles.hint}>
+          Prístup majú študenti so zakúpeným kurzom.
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -93,16 +88,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: Palette.onPrimary,
   },
-  secondaryButton: {
-    height: 54,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Palette.surface,
-  },
-  secondaryButtonText: {
-    fontFamily: Font.bodySemiBold,
-    fontSize: 17,
-    color: Palette.textButtonSecondary,
+  hint: {
+    fontFamily: Font.body,
+    fontSize: 14,
+    lineHeight: 20,
+    color: Palette.textSecondary,
+    textAlign: "center",
   },
 });
