@@ -53,6 +53,7 @@ export default function RootNavigator() {
         <Stack.Screen name="courses/[id]" />
         <Stack.Screen name="course-tests/[courseId]" />
         <Stack.Screen name="quiz/[testId]" />
+        <Stack.Screen name="exam-set/[courseId]/[setId]" />
         <Stack.Screen name="firearm-license" />
         <Stack.Screen name="sbs-license" />
       </Stack.Protected>

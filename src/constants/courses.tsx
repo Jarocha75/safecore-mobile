@@ -19,7 +19,7 @@ export const COURSE_TYPE_META: Record<
         color={Palette.primary}
       />
     ),
-    description: "Skupiny A, B, C, D, E – Testy a legislatíva",
+    description: "Simulácia otázok pred skúškou – si pripravený?",
   },
   S: {
     icon: (

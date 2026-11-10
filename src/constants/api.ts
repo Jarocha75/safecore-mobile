@@ -12,6 +12,10 @@ export const ApiPath = {
   me: "/api/mobile/me",
   courseTests: (courseId: string) =>
     `/api/mobile/courses/${encodeURIComponent(courseId)}/tests`,
+  examSets: (courseId: string) =>
+    `/api/mobile/courses/${encodeURIComponent(courseId)}/exam-sets`,
+  examSet: (courseId: string, setId: string) =>
+    `/api/mobile/courses/${encodeURIComponent(courseId)}/exam-sets/${encodeURIComponent(setId)}`,
   test: (testId: string) => `/api/mobile/tests/${encodeURIComponent(testId)}`,
   testResults: (testId: string) =>
     `/api/mobile/tests/${encodeURIComponent(testId)}/results`,

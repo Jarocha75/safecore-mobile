@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import ExamSetsSection from "@/components/exam/ExamSetsSection";
 import AsyncState from "@/components/ui/AsyncState";
 import PressableScale from "@/components/ui/PressableScale";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
@@ -24,12 +25,14 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
     ApiPath.courseTests(courseId),
   );
   const tests = data?.tests ?? [];
+  // Kurz Z má popri testoch aj sady otázok na skúšku, preto prázdny zoznam testov nie je koniec.
+  const hasExamSets = course?.type === "Z";
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <ScreenTopBar title={course?.title ?? "Testy"} />
 
-      {loading || error || tests.length === 0 ? (
+      {loading || error || (tests.length === 0 && !hasExamSets) ? (
         <AsyncState
           loading={loading}
           error={error}
@@ -62,6 +65,7 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
               <Ionicons name="chevron-forward" size={18} color={Palette.icon} />
             </PressableScale>
           ))}
+          {hasExamSets ? <ExamSetsSection courseId={courseId} /> : null}
         </ScrollView>
       )}
     </SafeAreaView>
