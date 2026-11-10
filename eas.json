@@ -8,6 +8,9 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_API_URL": "https://safecore.sk"
+      },
+      "android": {
+        "buildType": "apk"
       }
     },
     "production": {
