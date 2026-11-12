@@ -28,13 +28,14 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
   const tests = data?.tests ?? [];
   // Kurz Z má popri testoch aj sady otázok na skúšku, preto prázdny zoznam testov nie je koniec.
   const hasExamSets = course?.type === "Z";
-  const hasPracticeExam = course?.type === "S";
+  const practiceExamType =
+    course?.type === "S" || course?.type === "P" ? course.type : null;
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <ScreenTopBar title={course?.title ?? "Testy"} />
 
-      {loading || error || (tests.length === 0 && !hasExamSets && !hasPracticeExam) ? (
+      {loading || error || (tests.length === 0 && !hasExamSets && !practiceExamType) ? (
         <AsyncState
           loading={loading}
           error={error}
@@ -46,7 +47,9 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {course?.type === "S" ? <PracticeExamCard courseId={courseId} /> : null}
+          {practiceExamType ? (
+            <PracticeExamCard courseId={courseId} type={practiceExamType} />
+          ) : null}
           {tests.map((test) => (
             <PressableScale
               key={test.id}

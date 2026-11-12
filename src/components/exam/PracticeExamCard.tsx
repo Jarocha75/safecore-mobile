@@ -7,11 +7,17 @@ import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
 
 const TITLE = "Cvičný test";
-const META = "40 otázok · 40 minút";
+/** Rozsah cvičného testu podľa typu kurzu (musí sedieť so serverom, `lib/cvicnyTestConstants.ts` na webe). */
+const META: Record<"S" | "P", string> = {
+  S: "40 otázok · 40 minút",
+  P: "50 otázok · 50 minút",
+};
 const HINT = "Nanečisto ako na skúške: každý pokus má nové otázky a bodovanie.";
 
 /** Hlavná karta cvičného testu kurzu S – oddelená od zoznamu tém. */
-export default function PracticeExamCard({ courseId }: { courseId: string }) {
+type PracticeExamCardProps = { courseId: string; type: "S" | "P" };
+
+export default function PracticeExamCard({ courseId, type }: PracticeExamCardProps) {
   return (
     <PressableScale
       style={styles.card}
@@ -19,12 +25,12 @@ export default function PracticeExamCard({ courseId }: { courseId: string }) {
         router.push({ pathname: "/practice-exam/[courseId]", params: { courseId } })
       }
       accessibilityRole="button"
-      accessibilityLabel={`${TITLE}, ${META}`}
+      accessibilityLabel={`${TITLE}, ${META[type]}`}
     >
       <View style={styles.topRow}>
         <View style={styles.texts}>
           <Text style={styles.title}>{TITLE}</Text>
-          <Text style={styles.meta}>{META}</Text>
+          <Text style={styles.meta}>{META[type]}</Text>
         </View>
         <View style={styles.play}>
           <Ionicons name="timer" size={24} color={Palette.onPrimary} />
