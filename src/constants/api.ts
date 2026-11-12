@@ -14,6 +14,9 @@ export const ApiPath = {
   forgotPassword: "/api/forgot-password",
   courseTests: (courseId: string) =>
     `/api/mobile/courses/${encodeURIComponent(courseId)}/tests`,
+  /** Každé volanie zloží nový cvičný test (kurz S). */
+  practiceExam: (courseId: string) =>
+    `/api/mobile/courses/${encodeURIComponent(courseId)}/practice-exam`,
   examSets: (courseId: string) =>
     `/api/mobile/courses/${encodeURIComponent(courseId)}/exam-sets`,
   examSet: (courseId: string, setId: string) =>

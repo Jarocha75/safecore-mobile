@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import PracticeExamCard from "@/components/exam/PracticeExamCard";
 import ExamSetsSection from "@/components/exam/ExamSetsSection";
 import AsyncState from "@/components/ui/AsyncState";
 import PressableScale from "@/components/ui/PressableScale";
@@ -27,12 +28,13 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
   const tests = data?.tests ?? [];
   // Kurz Z má popri testoch aj sady otázok na skúšku, preto prázdny zoznam testov nie je koniec.
   const hasExamSets = course?.type === "Z";
+  const hasPracticeExam = course?.type === "S";
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <ScreenTopBar title={course?.title ?? "Testy"} />
 
-      {loading || error || (tests.length === 0 && !hasExamSets) ? (
+      {loading || error || (tests.length === 0 && !hasExamSets && !hasPracticeExam) ? (
         <AsyncState
           loading={loading}
           error={error}
@@ -44,6 +46,7 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
+          {course?.type === "S" ? <PracticeExamCard courseId={courseId} /> : null}
           {tests.map((test) => (
             <PressableScale
               key={test.id}
