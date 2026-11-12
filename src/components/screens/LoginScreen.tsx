@@ -122,6 +122,15 @@ export default function LoginScreen() {
               <Text style={styles.submitText}>Prihlásiť sa</Text>
             )}
           </PressableScale>
+
+          <PressableScale
+            style={styles.linkButton}
+            onPress={() => router.push("/forgot-password")}
+            accessibilityRole="link"
+            accessibilityLabel="Zabudnuté heslo"
+          >
+            <Text style={styles.linkText}>Zabudol som heslo</Text>
+          </PressableScale>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -157,6 +166,12 @@ const styles = StyleSheet.create({
     height: 54,
     justifyContent: "center",
     alignItems: "center",
+  },
+  linkButton: { alignItems: "center", paddingVertical: 18 },
+  linkText: {
+    fontFamily: Font.bodySemiBold,
+    fontSize: 16,
+    color: Palette.primary,
   },
   submitText: {
     fontFamily: Font.bodySemiBold,

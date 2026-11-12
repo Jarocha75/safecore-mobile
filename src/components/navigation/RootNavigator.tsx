@@ -45,6 +45,7 @@ export default function RootNavigator() {
       <Stack.Protected guard={!session}>
         <Stack.Screen name="index" />
         <Stack.Screen name="login" />
+        <Stack.Screen name="forgot-password" />
       </Stack.Protected>
 
       <Stack.Protected guard={!!session}>

@@ -10,6 +10,8 @@ export const API_TIMEOUT_MS = 15_000;
 export const ApiPath = {
   login: "/api/mobile/login",
   me: "/api/mobile/me",
+  /** Verejný endpoint webu – pošle e-mail s odkazom na obnovenie hesla (heslo sa mení na webe). */
+  forgotPassword: "/api/forgot-password",
   courseTests: (courseId: string) =>
     `/api/mobile/courses/${encodeURIComponent(courseId)}/tests`,
   examSets: (courseId: string) =>
