@@ -1,13 +1,35 @@
 import ContinueStudyCard from "@/components/home/ContinueStudyCard";
 import CourseCard from "@/components/CourseCard";
 import CustomHeader from "@/components/CustomHeader";
-import { HOME_SECTIONS, LAST_STUDY } from "@/constants/home";
+import { HOME_SECTIONS } from "@/constants/home";
 import { Palette } from "@/constants/palette";
-import { router } from "expo-router";
+import { useSession } from "@/context/SessionContext";
+import type { SavedStudy } from "@/types/study";
+import { loadStudy } from "@/utils/study-storage";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
+  const { session } = useSession();
+  const userId = session?.user.id;
+  const [study, setStudy] = useState<SavedStudy | null>(null);
+
+  // Po návrate z kvízu sa postup načíta znova.
+  useFocusEffect(
+    useCallback(() => {
+      if (!userId) return;
+      let cancelled = false;
+      loadStudy(userId).then((s) => {
+        if (!cancelled) setStudy(s);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [userId]),
+  );
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <CustomHeader
@@ -20,7 +42,17 @@ export default function HomeScreen() {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <ContinueStudyCard progress={LAST_STUDY} />
+        {study ? (
+          <ContinueStudyCard
+            progress={study}
+            onPress={() =>
+              router.push({
+                pathname: "/quiz/[testId]",
+                params: { testId: study.testId, courseId: study.courseId },
+              })
+            }
+          />
+        ) : null}
 
         {HOME_SECTIONS.map((section) => (
           <CourseCard

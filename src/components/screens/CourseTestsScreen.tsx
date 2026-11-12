@@ -48,7 +48,12 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
             <PressableScale
               key={test.id}
               style={CardStyles.listCard}
-              onPress={() => router.push(`/quiz/${test.id}`)}
+              onPress={() =>
+                router.push({
+                  pathname: "/quiz/[testId]",
+                  params: { testId: test.id, courseId },
+                })
+              }
               accessibilityRole="button"
               accessibilityLabel={`${test.title}, ${questionCountLabel(test.questionCount)}`}
             >
