@@ -19,12 +19,18 @@ export async function loadCached<T>(
   }
 }
 
-export async function saveCached<T>(userId: string, path: string, data: T) {
+/** Uloží odpoveď; vráti false, ak sa zápis nepodaril (cache je len pohodlie, preto nevyhadzuje chybu). */
+export async function saveCached<T>(
+  userId: string,
+  path: string,
+  data: T,
+): Promise<boolean> {
   try {
     const entry: CachedResponse<T> = { data, savedAt: Date.now() };
     await AsyncStorage.setItem(keyFor(userId, path), JSON.stringify(entry));
+    return true;
   } catch {
-    // Cache je len pohodlie – nepodarené uloženie nerušíme.
+    return false;
   }
 }
 

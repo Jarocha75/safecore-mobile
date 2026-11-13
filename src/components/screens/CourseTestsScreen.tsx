@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import OfflineDownloadCard from "@/components/courses/OfflineDownloadCard";
 import PracticeExamCard from "@/components/exam/PracticeExamCard";
 import ExamSetsSection from "@/components/exam/ExamSetsSection";
 import AsyncState from "@/components/ui/AsyncState";
@@ -47,6 +48,9 @@ export default function CourseTestsScreen({ courseId }: { courseId: string }) {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
+          {course ? (
+            <OfflineDownloadCard courseId={courseId} type={course.type} />
+          ) : null}
           {practiceExamType ? (
             <PracticeExamCard courseId={courseId} type={practiceExamType} />
           ) : null}

@@ -13,6 +13,8 @@ type ResourceState<T> = {
   offline: boolean;
   /** Kedy bola zobrazená kópia uložená (ms od epochy); null pri čerstvých dátach. */
   savedAt: number | null;
+  /** Server sa nepodarilo kontaktovať (bez ohľadu na to, či je k dispozícii kópia). */
+  unreachable: boolean;
 };
 
 type Options = {
@@ -35,6 +37,7 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
     loading: true,
     offline: false,
     savedAt: null,
+    unreachable: false,
   });
   const [attempt, setAttempt] = useState(0);
 
@@ -54,6 +57,7 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
           loading: false,
           offline: false,
           savedAt: cached.savedAt,
+          unreachable: false,
         });
       }
 
@@ -65,12 +69,19 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
         setState((prev) =>
           cached && JSON.stringify(cached.data) === JSON.stringify(data)
             ? { ...prev, savedAt: null }
-            : { data, error: null, loading: false, offline: false, savedAt: null },
+            : {
+                data,
+                error: null,
+                loading: false,
+                offline: false,
+                savedAt: null,
+                unreachable: false,
+              },
         );
       } catch (error) {
         if (cancelled) return;
         if (cached && error instanceof ApiError && error.status === 0) {
-          setState((prev) => ({ ...prev, offline: true }));
+          setState((prev) => ({ ...prev, offline: true, unreachable: true }));
           return;
         }
         // Server odmietol (napr. 403 – kurz už nie je aktívny): kópiu nezobrazujeme.
@@ -86,6 +97,7 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
           loading: false,
           offline: false,
           savedAt: null,
+          unreachable: error instanceof ApiError && error.status === 0,
         });
       }
     })();
@@ -96,7 +108,12 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
   }, [path, token, userId, cache, attempt, isOfflineAccessValid]);
 
   const reload = () => {
-    setState((prev) => ({ ...prev, loading: true, error: null }));
+    setState((prev) => ({
+      ...prev,
+      loading: true,
+      error: null,
+      unreachable: false,
+    }));
     setAttempt((n) => n + 1);
   };
 
