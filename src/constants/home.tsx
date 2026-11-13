@@ -17,6 +17,7 @@ export const HOME_SECTIONS: HomeSection[] = [
     id: "legislativa",
     icon: <Ionicons name="library" size={ICON_SIZE} color={Palette.primary} />,
     title: "Zákony a legislatíva",
+    href: "/legislation",
     description: "Aktuálne znenia zákonov a predpisov",
   },
   {
