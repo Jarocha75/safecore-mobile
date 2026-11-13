@@ -1,5 +1,4 @@
-import * as Sharing from "expo-sharing";
-import * as WebBrowser from "expo-web-browser";
+import { router } from "expo-router";
 import { Fragment } from "react";
 import { Alert, ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,40 +12,25 @@ import { Font } from "@/constants/typography";
 import { useIsOnline } from "@/hooks/useIsOnline";
 import { useLegislationDownload } from "@/hooks/useLegislationDownload";
 import type { LegalNorm } from "@/types/legislation";
-import { localPdfUri, pdfUrl } from "@/utils/legislation-offline";
+import { localPdfUri } from "@/utils/legislation-offline";
 
-const OPEN_FAILED_TITLE = "PDF sa nepodarilo otvoriť";
-
-/** Stiahnuté PDF sa otvorí v systémovej ponuke aplikácií, inak sa otvorí z webu. */
-async function openNorm(norm: LegalNorm, localUri: string | null, online: boolean) {
-  try {
-    if (localUri) {
-      await Sharing.shareAsync(localUri, {
-        mimeType: "application/pdf",
-        UTI: "com.adobe.pdf",
-        dialogTitle: norm.title,
-      });
-      return;
-    }
-    if (!online) {
-      Alert.alert(
-        "Si offline",
-        "Tento predpis nie je stiahnutý. Pripoj sa k internetu alebo ho stiahni na offline.",
-      );
-      return;
-    }
-    await WebBrowser.openBrowserAsync(pdfUrl(norm.pdf!));
-  } catch {
+/** Stiahnuté PDF alebo online predpis sa otvorí v čítačke; offline bez stiahnutia nejde. */
+function openNorm(norm: LegalNorm, downloaded: boolean, online: boolean) {
+  if (!downloaded && !online) {
     Alert.alert(
-      OPEN_FAILED_TITLE,
-      "Skontroluj pripojenie na internet a skús to znova.",
+      "Si offline",
+      "Tento predpis nie je stiahnutý. Pripoj sa k internetu alebo ho stiahni na offline.",
     );
+    return;
   }
+  router.push({ pathname: "/legislation/[id]", params: { id: norm.id } });
 }
 
 export default function LegislationScreen() {
   const online = useIsOnline();
   const { manifest, status, progress, error, start } = useLegislationDownload();
+  const downloaded = (norm: LegalNorm) =>
+    localPdfUri(manifest, norm.id) !== null;
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -73,10 +57,8 @@ export default function LegislationScreen() {
               <LegalNormCard
                 key={norm.id}
                 norm={norm}
-                downloaded={localPdfUri(manifest, norm.id) !== null}
-                onPress={() =>
-                  openNorm(norm, localPdfUri(manifest, norm.id), online)
-                }
+                downloaded={downloaded(norm)}
+                onPress={() => openNorm(norm, downloaded(norm), online)}
               />
             ))}
           </Fragment>

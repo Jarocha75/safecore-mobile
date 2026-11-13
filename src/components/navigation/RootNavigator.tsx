@@ -56,7 +56,8 @@ export default function RootNavigator() {
         <Stack.Protected guard={!!session}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="courses/index" />
-          <Stack.Screen name="legislation" />
+          <Stack.Screen name="legislation/index" />
+          <Stack.Screen name="legislation/[id]" />
           <Stack.Screen name="courses/[id]" />
           <Stack.Screen name="course-tests/[courseId]" />
           <Stack.Screen name="quiz/[testId]" />
