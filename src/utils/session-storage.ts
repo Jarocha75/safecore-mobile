@@ -6,6 +6,7 @@ import type { AuthCourse, AuthUser } from "@/types/auth";
 const TOKEN_KEY = "session_token";
 const USER_KEY = "session_user";
 const COURSES_KEY = "session_courses";
+const VERIFIED_KEY = "session_verified_at";
 
 type StoredSession = { token: string; user: AuthUser };
 
@@ -34,6 +35,7 @@ export async function clearStoredSession() {
       SecureStore.deleteItemAsync(TOKEN_KEY),
       SecureStore.deleteItemAsync(USER_KEY),
       AsyncStorage.removeItem(COURSES_KEY),
+      AsyncStorage.removeItem(VERIFIED_KEY),
     ]);
   } catch {
     // Úložisko sa nepodarilo vyčistiť – relácia v pamäti sa aj tak zruší.
@@ -55,5 +57,23 @@ export async function saveStoredCourses(courses: AuthCourse[]) {
     await AsyncStorage.setItem(COURSES_KEY, JSON.stringify(courses));
   } catch {
     // Len pohodlie pre offline štart.
+  }
+}
+
+/** Čas posledného úspešného overenia prístupu na serveri (ms od epochy); null, ak nie je známy. */
+export async function loadVerifiedAt(): Promise<number | null> {
+  try {
+    const value = Number(await AsyncStorage.getItem(VERIFIED_KEY));
+    return Number.isFinite(value) && value > 0 ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveVerifiedAt(timestamp: number) {
+  try {
+    await AsyncStorage.setItem(VERIFIED_KEY, String(timestamp));
+  } catch {
+    // Pri zlyhaní ostáva platný čas z pamäte.
   }
 }

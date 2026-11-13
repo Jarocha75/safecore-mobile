@@ -18,6 +18,12 @@ type RequestOptions = {
 };
 
 let unauthorizedHandler: (() => void) | null = null;
+let verifiedHandler: (() => void) | null = null;
+
+/** Zavolá sa po každej úspešnej odpovedi na požiadavku s tokenom (server potvrdil prístup). */
+export function setVerifiedHandler(handler: (() => void) | null) {
+  verifiedHandler = handler;
+}
 
 /** Zavolá sa, keď server odmietne platný token (vypršal, účet bol zablokovaný). */
 export function setUnauthorizedHandler(handler: (() => void) | null) {
@@ -69,5 +75,6 @@ export async function apiFetch<T>(
   }
 
   if (data === null) throw new ApiError(response.status, GENERIC_ERROR);
+  if (token) verifiedHandler?.();
   return data;
 }

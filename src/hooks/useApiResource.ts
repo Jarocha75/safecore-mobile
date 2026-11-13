@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { OFFLINE_EXPIRED_MESSAGE } from "@/constants/offline";
 import { useSession } from "@/context/SessionContext";
 import { ApiError, apiFetch } from "@/utils/api";
 import { loadCached, saveCached } from "@/utils/api-cache";
@@ -25,7 +26,7 @@ type Options = {
  * Pri chybe siete ostane kópia zobrazená (`offline`), chyby servera sa hlásia ako predtým.
  */
 export function useApiResource<T>(path: string, { cache = true }: Options = {}) {
-  const { session } = useSession();
+  const { session, isOfflineAccessValid } = useSession();
   const token = session?.token;
   const userId = session?.user.id;
   const [state, setState] = useState<ResourceState<T>>({
@@ -42,7 +43,9 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
     let cancelled = false;
 
     (async () => {
-      const cached = cache ? await loadCached<T>(userId, path) : null;
+      // Po vypršaní offline platnosti sa kópia nepoužije, kým server prístup znova nepotvrdí.
+      const stored = cache ? await loadCached<T>(userId, path) : null;
+      const cached = stored && isOfflineAccessValid() ? stored : null;
       if (cancelled) return;
       if (cached) {
         setState({
@@ -72,7 +75,11 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
         }
         // Server odmietol (napr. 403 – kurz už nie je aktívny): kópiu nezobrazujeme.
         const message =
-          error instanceof ApiError ? error.message : "Niečo sa pokazilo.";
+          stored && !cached && error instanceof ApiError && error.status === 0
+            ? OFFLINE_EXPIRED_MESSAGE
+            : error instanceof ApiError
+              ? error.message
+              : "Niečo sa pokazilo.";
         setState({
           data: null,
           error: message,
@@ -86,7 +93,7 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
     return () => {
       cancelled = true;
     };
-  }, [path, token, userId, cache, attempt]);
+  }, [path, token, userId, cache, attempt, isOfflineAccessValid]);
 
   const reload = () => {
     setState((prev) => ({ ...prev, loading: true, error: null }));
