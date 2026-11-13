@@ -1,9 +1,11 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 
-import type { AuthUser } from "@/types/auth";
+import type { AuthCourse, AuthUser } from "@/types/auth";
 
 const TOKEN_KEY = "session_token";
 const USER_KEY = "session_user";
+const COURSES_KEY = "session_courses";
 
 type StoredSession = { token: string; user: AuthUser };
 
@@ -31,8 +33,27 @@ export async function clearStoredSession() {
     await Promise.all([
       SecureStore.deleteItemAsync(TOKEN_KEY),
       SecureStore.deleteItemAsync(USER_KEY),
+      AsyncStorage.removeItem(COURSES_KEY),
     ]);
   } catch {
     // Úložisko sa nepodarilo vyčistiť – relácia v pamäti sa aj tak zruší.
+  }
+}
+
+/** Posledné známe kurzy – aby po štarte offline nebol zoznam kurzov prázdny. */
+export async function loadStoredCourses(): Promise<AuthCourse[]> {
+  try {
+    const json = await AsyncStorage.getItem(COURSES_KEY);
+    return json ? (JSON.parse(json) as AuthCourse[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveStoredCourses(courses: AuthCourse[]) {
+  try {
+    await AsyncStorage.setItem(COURSES_KEY, JSON.stringify(courses));
+  } catch {
+    // Len pohodlie pre offline štart.
   }
 }

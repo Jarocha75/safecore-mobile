@@ -9,9 +9,12 @@ import {
 import { ApiPath } from "@/constants/api";
 import type { LoginResponse, MeResponse, Session } from "@/types/auth";
 import { ApiError, apiFetch, setUnauthorizedHandler } from "@/utils/api";
+import { clearApiCache } from "@/utils/api-cache";
 import {
   clearStoredSession,
+  loadStoredCourses,
   loadStoredSession,
+  saveStoredCourses,
   saveStoredSession,
 } from "@/utils/session-storage";
 
@@ -39,7 +42,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const signOut = async () => {
-    await clearStoredSession();
+    await Promise.all([clearStoredSession(), clearApiCache()]);
     setSession(null);
   };
 
@@ -53,6 +56,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (me.courses.length === 0) throw new ApiError(403, NO_COURSE_MESSAGE);
 
     await saveStoredSession({ token, user: me.user });
+    await saveStoredCourses(me.courses);
     setSession({ token, user: me.user, courses: me.courses });
   };
 
@@ -69,7 +73,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     (async () => {
       const stored = await loadStoredSession();
       if (cancelled) return;
-      if (stored) setSession({ ...stored, courses: [] });
+      const storedCourses = stored ? await loadStoredCourses() : [];
+      if (cancelled) return;
+      if (stored) setSession({ ...stored, courses: storedCourses });
       setIsLoading(false);
       if (!stored) return;
 
@@ -84,6 +90,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           await signOut();
           return;
         }
+        void saveStoredCourses(me.courses);
         setSession({ token: stored.token, user: me.user, courses: me.courses });
       } catch {
         // offline alebo server nedostupný

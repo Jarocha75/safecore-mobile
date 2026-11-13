@@ -13,6 +13,7 @@ import type { PracticeExam } from "@/types/practice-exam";
 export default function PracticeExamScreen({ courseId }: { courseId: string }) {
   const { data, error, loading, reload } = useApiResource<PracticeExam>(
     ApiPath.practiceExam(courseId),
+    { cache: false },
   );
   // Zmena kľúča znova vytvorí pokus (nový test, nový čas, prázdne odpovede).
   const [run, setRun] = useState(0);
