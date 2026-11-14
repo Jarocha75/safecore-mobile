@@ -5,24 +5,27 @@ import PressableScale from "@/components/ui/PressableScale";
 import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
 import { useIsOnline } from "@/hooks/useIsOnline";
-import type { LegislationManifest } from "@/types/legislation";
+import type { PdfManifest } from "@/types/pdf";
 
-type LegislationDownloadCardProps = {
-  manifest: LegislationManifest | null;
+type PdfDownloadCardProps = {
+  manifest: PdfManifest | null;
   status: "idle" | "downloading" | "error";
   progress: { done: number; total: number };
   error: string | null;
   onStart: () => void;
+  /** Čo sa sťahuje, v 2. páde množného čísla: „predpisov“, „dokumentov“. */
+  noun: string;
 };
 
-/** Karta „Stiahnuť na offline“ v zozname predpisov (stav drží rodič, aby ho zdieľal s kartami). */
-export default function LegislationDownloadCard({
+/** Karta „Stiahnuť na offline“ v zozname PDF (stav drží rodič, aby ho zdieľal s kartami). */
+export default function PdfDownloadCard({
   manifest,
   status,
   progress,
   error,
   onStart,
-}: LegislationDownloadCardProps) {
+  noun,
+}: PdfDownloadCardProps) {
   const online = useIsOnline();
   const downloading = status === "downloading";
 
@@ -34,8 +37,8 @@ export default function LegislationDownloadCard({
     : error
       ? error
       : manifest
-        ? `Naposledy ${new Date(manifest.savedAt).toLocaleDateString("sk-SK")}. Aktualizuj, ak sa predpis na webe zmenil.`
-        : "PDF predpisov budeš mať k dispozícii aj bez pripojenia.";
+        ? `Naposledy ${new Date(manifest.savedAt).toLocaleDateString("sk-SK")}. Aktualizuj, ak sa niečo na webe zmenilo.`
+        : `PDF ${noun} budeš mať k dispozícii aj bez pripojenia.`;
   const actionLabel = manifest ? "Aktualizovať" : "Stiahnuť";
 
   return (

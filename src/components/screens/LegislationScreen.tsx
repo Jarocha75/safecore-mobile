@@ -4,15 +4,15 @@ import { Alert, ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import LegalNormCard from "@/components/legislation/LegalNormCard";
-import LegislationDownloadCard from "@/components/legislation/LegislationDownloadCard";
+import PdfDownloadCard from "@/components/pdf/PdfDownloadCard";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { LEGAL_NORM_GROUPS } from "@/constants/legislation";
 import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
 import { useIsOnline } from "@/hooks/useIsOnline";
-import { useLegislationDownload } from "@/hooks/useLegislationDownload";
+import { usePdfDownload } from "@/hooks/usePdfDownload";
 import type { LegalNorm } from "@/types/legislation";
-import { localPdfUri } from "@/utils/legislation-offline";
+import { localPdfUri } from "@/utils/pdf-offline";
 
 /** Stiahnuté PDF alebo online predpis sa otvorí v čítačke; offline bez stiahnutia nejde. */
 function openNorm(norm: LegalNorm, downloaded: boolean, online: boolean) {
@@ -28,9 +28,9 @@ function openNorm(norm: LegalNorm, downloaded: boolean, online: boolean) {
 
 export default function LegislationScreen() {
   const online = useIsOnline();
-  const { manifest, status, progress, error, start } = useLegislationDownload();
+  const { manifest, status, progress, error, start } = usePdfDownload("legislation");
   const downloaded = (norm: LegalNorm) =>
-    localPdfUri(manifest, norm.id) !== null;
+    localPdfUri("legislation", manifest, norm.id) !== null;
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -40,12 +40,13 @@ export default function LegislationScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <LegislationDownloadCard
+        <PdfDownloadCard
           manifest={manifest}
           status={status}
           progress={progress}
           error={error}
           onStart={start}
+          noun="predpisov"
         />
 
         {LEGAL_NORM_GROUPS.map((group) => (

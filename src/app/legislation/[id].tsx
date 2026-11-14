@@ -1,5 +1,5 @@
-import LegislationPdfScreen from "@/components/screens/LegislationPdfScreen";
+import PdfViewerScreen from "@/components/screens/PdfViewerScreen";
 
 export default function LegislationPdfRoute() {
-  return <LegislationPdfScreen />;
+  return <PdfViewerScreen collection="legislation" fallbackTitle="Predpis" />;
 }

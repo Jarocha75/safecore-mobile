@@ -26,6 +26,7 @@ export const HOME_SECTIONS: HomeSection[] = [
       <Ionicons name="document-text" size={ICON_SIZE} color={Palette.primary} />
     ),
     title: "Dokumenty a tlačivá",
+    href: "/documents",
     description: "Tlačivá a podklady na stiahnutie",
   },
   {

@@ -1,8 +1,5 @@
 import type { LegalNormGroup } from "@/types/legislation";
 
-/** Základná adresa webu, z ktorého sa otvárajú PDF predpisov. */
-export const WEB_URL = "https://www.safecore.sk";
-
 /** Obsah podľa `data/zakon.ts` vo webovom repe – pri zmene na webe upraviť aj tu. */
 export const LEGAL_NORM_GROUPS: LegalNormGroup[] = [
   {

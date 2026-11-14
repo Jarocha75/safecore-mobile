@@ -7,42 +7,54 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
+import type { PdfCollection } from "@/types/pdf";
 import {
-  allNorms,
-  loadLegislationManifest,
+  findPdfItem,
+  loadPdfManifest,
   localPdfUri,
   pdfUrl,
-} from "@/utils/legislation-offline";
+} from "@/utils/pdf-offline";
 
-/** Čítačka PDF predpisu: stiahnutý súbor z zariadenia, inak z webu. */
-export default function LegislationPdfScreen() {
+type PdfViewerScreenProps = {
+  collection: PdfCollection;
+  /** Názov v hornej lište, kým nie je známa položka. */
+  fallbackTitle: string;
+};
+
+/** Čítačka PDF: stiahnutý súbor z zariadenia, inak z webu. */
+export default function PdfViewerScreen({
+  collection,
+  fallbackTitle,
+}: PdfViewerScreenProps) {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const norm = allNorms().find((n) => n.id === id);
+  const norm = findPdfItem(collection, id);
   const [source, setSource] = useState<{ uri: string } | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     if (!norm?.pdf) return;
     let cancelled = false;
-    loadLegislationManifest().then((manifest) => {
+    loadPdfManifest(collection).then((manifest) => {
       if (cancelled) return;
-      setSource({ uri: localPdfUri(manifest, norm.id) ?? pdfUrl(norm.pdf!) });
+      setSource({
+        uri: localPdfUri(collection, manifest, norm.id) ?? pdfUrl(norm.pdf!),
+      });
     });
     return () => {
       cancelled = true;
     };
-  }, [norm]);
+  }, [collection, norm]);
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
-      <ScreenTopBar title={norm?.title ?? "Predpis"} />
+      <ScreenTopBar title={norm?.title ?? fallbackTitle} />
 
       {!norm?.pdf || failed ? (
         <View style={styles.center}>
           <Text style={styles.message}>
             {failed
               ? "PDF sa nepodarilo načítať. Skontroluj pripojenie na internet a skús to znova."
-              : "Tento predpis nie je k dispozícii."}
+              : "Tento súbor nie je k dispozícii."}
           </Text>
         </View>
       ) : source ? (
