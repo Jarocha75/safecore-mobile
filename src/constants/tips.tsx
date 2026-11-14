@@ -67,6 +67,46 @@ export const TIP_TOPICS: TipTopic[] = [
           },
         ],
       },
+      {
+        id: "sposob-vykonania-skusky",
+        title: "Spôsob vykonania skúšky",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Skúška sa vykoná do 60 dní od podania žiadosti o vydanie zbrojného preukazu. Miesto a termín konania skúšky môžu byť žiadateľovi oznámené pri podaní žiadosti na okresnom riaditeľstve Policajného zboru (ďalej len „policajný útvar“); inak policajný útvar oznámi miesto a termín konania skúšky žiadateľovi najneskôr 14 dní pred vykonaním skúšky. Žiadateľ môže písomne požiadať o zmenu termínu vykonania skúšky z dôležitých osobných prekážok. O žiadosti rozhodne predseda skúšobnej komisie.",
+          },
+        ],
+      },
+      {
+        id: "vysledok-skusky",
+        title: "Výsledok skúšky",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Výsledok skúšky sa hodnotí klasifikačným stupňom „vyhovel“ alebo klasifikačným stupňom „nevyhovel“. Predseda skúšobnej komisie zapíše dátum konania a výsledok skúšky do žiadosti o vydanie zbrojného preukazu žiadateľa.",
+          },
+        ],
+      },
+      {
+        id: "nahradny-termin-skusky",
+        title: "Náhradný termín skúšky",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Ak žiadateľ zo závažných dôvodov nemohol prísť na skúšku alebo na opakovanú skúšku, môže písomne požiadať o určenie náhradného termínu. O žiadosti rozhodne predseda skúšobnej komisie, ktorý odôvodnenosť žiadosti posúdi a žiadosť zamietne alebo určí náhradný termín skúšky alebo opakovanej skúšky.",
+          },
+        ],
+      },
+      {
+        id: "priebeh-skusky",
+        title: "Priebeh skúšky",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Žiadateľ, ktorý si vyžreboval súbor otázok, má nárok na prípravu počas 30 minút. Čas vymedzený na prípravu možno skrátiť len na žiadosť žiadateľa, ak vyhlási, že je pripravený odpovedať. Pri príprave nie je dovolené používať vopred vypracované odpovede na otázky, odbornú literatúru, znenia zákonov a predpisov s nimi súvisiacimi, diktafóny, mobilné telefóny, elektronické diáre a iné nepovolené pomôcky. Taktiež nie je dovolené po vyžrebovaní súboru otázok vzdialiť sa zo skúšobnej miestnosti.",
+          },
+        ],
+      },
     ],
   },
   {
