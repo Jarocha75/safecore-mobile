@@ -21,6 +21,43 @@ export const DOCUMENT_GROUPS: DocumentGroup[] = [
   {
     id: "sbs",
     title: "Tlačivá – SBS",
-    items: [],
+    items: [
+      {
+        id: "sbs-ziadost-s",
+        title: "Žiadosť o vydanie preukazu odbornej spôsobilosti typu S",
+        description: "Tlačivo žiadosti o vydanie preukazu odbornej spôsobilosti typu S.",
+        pdf: "/dokumenty/tlaciva/Ziadost o vydanie preukazu odbornej sposobilosti typu S.pdf",
+      },
+      {
+        id: "sbs-ziadost-p",
+        title: "Žiadosť o vydanie preukazu odbornej spôsobilosti typu P",
+        description: "Tlačivo žiadosti o vydanie preukazu odbornej spôsobilosti typu P.",
+        pdf: "/dokumenty/tlaciva/Ziadost o vydanie preukazu odbornej sposobilosti typu P.pdf",
+      },
+      {
+        id: "sbs-ziadost-strata",
+        title: "Žiadosť o vydanie preukazu z dôvodu straty",
+        description: "Žiadosť o vydanie nového preukazu odbornej spôsobilosti po jeho strate.",
+        pdf: "/dokumenty/tlaciva/Ziadost o vydanie preukazu odbornej sposobilosti z dovodu straty.pdf",
+      },
+      {
+        id: "sbs-ziadost-odcudzenie",
+        title: "Žiadosť o vydanie preukazu z dôvodu odcudzenia",
+        description: "Žiadosť o vydanie nového preukazu odbornej spôsobilosti po jeho odcudzení.",
+        pdf: "/dokumenty/tlaciva/Ziadost o vydanie preukazu odbornej sposobilosti z dovodu odcudzenia.pdf",
+      },
+      {
+        id: "sbs-cestne-vyhlasenie-strata",
+        title: "Čestné vyhlásenie o strate preukazu",
+        description: "Čestné vyhlásenie o strate preukazu odbornej spôsobilosti.",
+        pdf: "/dokumenty/tlaciva/Cestne vyhlasenie o strate preukazu odbornej sposobilosti.pdf",
+      },
+      {
+        id: "sbs-cestne-vyhlasenie-odcudzenie",
+        title: "Čestné vyhlásenie o odcudzení preukazu",
+        description: "Čestné vyhlásenie o odcudzení preukazu odbornej spôsobilosti.",
+        pdf: "/dokumenty/tlaciva/Cestne vyhlasenie o odcudzeni preukazu odbornej sposobilosti.pdf",
+      },
+    ],
   },
 ];
