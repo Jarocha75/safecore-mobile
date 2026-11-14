@@ -1,6 +1,13 @@
+import * as Print from "expo-print";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Pdf from "react-native-pdf";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -45,9 +52,34 @@ export default function PdfViewerScreen({
     };
   }, [collection, norm]);
 
+  const canPrint = source !== null && !failed;
+
+  /** Otvorí systémový dialóg tlače (stiahnutý súbor alebo adresa z webu). */
+  const printPdf = async () => {
+    if (!source) return;
+    try {
+      await Print.printAsync({ uri: source.uri });
+    } catch (error) {
+      // Zrušenie tlače používateľom nie je chyba.
+      const message = error instanceof Error ? error.message : "";
+      if (/cancel|did not complete/i.test(message)) return;
+      Alert.alert(
+        "Tlač sa nepodarila",
+        "Skontroluj pripojenie na internet a skús to znova.",
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
-      <ScreenTopBar title={norm?.title ?? fallbackTitle} />
+      <ScreenTopBar
+        title={norm?.title ?? fallbackTitle}
+        action={
+          canPrint
+            ? { icon: "print-outline", label: "Tlačiť", onPress: printPdf }
+            : undefined
+        }
+      />
 
       {!norm?.pdf || failed ? (
         <View style={styles.center}>
