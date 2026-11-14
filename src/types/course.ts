@@ -25,7 +25,7 @@ export type PrepCourse = {
 
 /** Karta na Home, ktorá môže viesť na vlastnú obrazovku. */
 export type HomeSection = Course & {
-  href?: "/courses" | "/legislation" | "/documents";
+  href?: "/courses" | "/legislation" | "/documents" | "/tips";
 };
 
 /** Jednotka trvania predmetov v osnove kurzu. */
