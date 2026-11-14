@@ -7,7 +7,7 @@ const ICON_SIZE = 28;
 
 /**
  * Rady a tipy. Novú tému alebo sekciu pridaj sem, nie do obrazovky.
- * Sekcia = nadpis + bloky (`paragraph` = odsek, `list` = odrážky).
+ * Sekcia = karta v téme (názov + popis) a jej text z blokov (`paragraph` = odsek, `list` = odrážky).
  */
 export const TIP_TOPICS: TipTopic[] = [
   {
@@ -24,7 +24,8 @@ export const TIP_TOPICS: TipTopic[] = [
     sections: [
       {
         id: "podanie-ziadosti",
-        title: "Podanie žiadosti",
+        title: "Ako podať žiadosť",
+        description: "Údaje v žiadosti a potrebné prílohy",
         blocks: [
           {
             type: "paragraph",
@@ -69,7 +70,8 @@ export const TIP_TOPICS: TipTopic[] = [
       },
       {
         id: "sposob-vykonania-skusky",
-        title: "Spôsob vykonania skúšky",
+        title: "Vykonanie skúšky",
+        description: "Lehoty, termín a miesto skúšky",
         blocks: [
           {
             type: "paragraph",
@@ -80,6 +82,7 @@ export const TIP_TOPICS: TipTopic[] = [
       {
         id: "vysledok-skusky",
         title: "Výsledok skúšky",
+        description: "Ako sa skúška hodnotí",
         blocks: [
           {
             type: "paragraph",
@@ -90,6 +93,7 @@ export const TIP_TOPICS: TipTopic[] = [
       {
         id: "nahradny-termin-skusky",
         title: "Náhradný termín skúšky",
+        description: "Čo robiť, ak sa nemôžeš zúčastniť",
         blocks: [
           {
             type: "paragraph",
@@ -100,6 +104,7 @@ export const TIP_TOPICS: TipTopic[] = [
       {
         id: "priebeh-skusky",
         title: "Priebeh skúšky",
+        description: "Príprava, čas a čo nie je dovolené",
         blocks: [
           {
             type: "paragraph",

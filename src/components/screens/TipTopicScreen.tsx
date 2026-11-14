@@ -1,14 +1,15 @@
-import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import { ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import TipBlockView from "@/components/tips/TipBlockView";
+import TipSectionCard from "@/components/tips/TipSectionCard";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { Palette } from "@/constants/palette";
 import { TIP_TOPICS } from "@/constants/tips";
 import { Font } from "@/constants/typography";
 
-export default function TipDetailScreen() {
+/** Téma v Radách a tipoch: karty jej sekcií. */
+export default function TipTopicScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const topic = TIP_TOPICS.find((t) => t.id === id);
 
@@ -21,15 +22,18 @@ export default function TipDetailScreen() {
         showsVerticalScrollIndicator={false}
       >
         {topic && topic.sections.length > 0 ? (
-          topic.sections.map((section) => (
-            <View key={section.id} style={styles.section}>
-              <Text style={styles.sectionTitle} accessibilityRole="header">
-                {section.title}
-              </Text>
-              {section.blocks.map((block, index) => (
-                <TipBlockView key={index} block={block} />
-              ))}
-            </View>
+          topic.sections.map((section, index) => (
+            <TipSectionCard
+              key={section.id}
+              section={section}
+              index={index + 1}
+              onPress={() =>
+                router.push({
+                  pathname: "/tips/[id]/[sectionId]",
+                  params: { id: topic.id, sectionId: section.id },
+                })
+              }
+            />
           ))
         ) : (
           <Text style={styles.empty}>Obsah pripravujeme.</Text>
@@ -42,13 +46,6 @@ export default function TipDetailScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Palette.background },
   scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 40 },
-  section: { marginBottom: 8 },
-  sectionTitle: {
-    fontFamily: Font.displayBold,
-    fontSize: 24,
-    color: Palette.text,
-    marginBottom: 14,
-  },
   empty: {
     fontFamily: Font.body,
     fontSize: 16,
