@@ -3,7 +3,7 @@ import type { LicenseFormData, LicenseKind } from "@/types/license";
 import { apiFetch } from "@/utils/api";
 import { phoneDigits } from "@/utils/phone";
 
-const SERVER_KIND: Record<LicenseKind, "FIREARM" | "SBS"> = {
+export const SERVER_KIND: Record<LicenseKind, "FIREARM" | "SBS"> = {
   firearm: "FIREARM",
   sbs: "SBS",
 };
@@ -29,6 +29,17 @@ export async function saveLicenseReminder(
       phone: phoneDigits(data.phone),
       smsConsent: data.smsConsent,
     },
+    token: sessionToken,
+  });
+}
+
+/** Zruší SMS upozornenie daného typu preukazu. */
+export async function deleteLicenseReminder(
+  kind: LicenseKind,
+  sessionToken: string,
+) {
+  await apiFetch(`${ApiPath.licenseReminders}?kind=${SERVER_KIND[kind]}`, {
+    method: "DELETE",
     token: sessionToken,
   });
 }

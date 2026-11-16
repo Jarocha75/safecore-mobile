@@ -6,6 +6,7 @@ export const LICENSES: LicenseCardItem[] = [
   {
     id: "zbrojny-preukaz",
     title: "Zbrojný preukaz",
+    kind: "firearm",
     href: "/firearm-license",
     icon: (
       <MaterialCommunityIcons
@@ -18,6 +19,7 @@ export const LICENSES: LicenseCardItem[] = [
   {
     id: "preukaz-sbs",
     title: "Preukaz SBS",
+    kind: "sbs",
     href: "/sbs-license",
     icon: <Ionicons name="id-card" size={24} color={Palette.primary} />,
   },

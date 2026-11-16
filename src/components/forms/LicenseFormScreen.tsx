@@ -10,6 +10,8 @@ import type {
   LicenseFormValues,
 } from "@/types/license";
 import { formatPhone } from "@/utils/phone";
+import ReminderStatusCard from "@/components/license/ReminderStatusCard";
+import { useLicenseReminders } from "@/hooks/useLicenseReminders";
 import ConsentCheckbox from "@/components/forms/ConsentCheckbox";
 import { useSession } from "@/context/SessionContext";
 import { ApiError } from "@/utils/api";
@@ -35,6 +37,8 @@ export default function LicenseFormScreen({
   config: LicenseFormConfig;
 }) {
   const { session } = useSession();
+  const { find, remove, removing, removeError } = useLicenseReminders();
+  const existing = find(config.kind);
   const schema = useMemo(() => createLicenseSchema(config), [config]);
   // Platnosť preukazu: od dnešného dňa najviac 20 rokov dopredu.
   const { minDate, maxDate } = useMemo(() => {
@@ -104,6 +108,14 @@ export default function LicenseFormScreen({
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
+          {existing ? (
+            <ReminderStatusCard
+              reminder={existing}
+              removing={removing}
+              error={removeError}
+              onRemove={() => void remove(config.kind)}
+            />
+          ) : null}
           <Controller
             control={control}
             name="firstName"

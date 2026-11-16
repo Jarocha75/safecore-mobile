@@ -28,12 +28,21 @@ export type LicenseFormConfig = {
   numberInvalidMessage: string;
 };
 
+/** SMS upozornenie uložené na serveri (celé telefónne číslo server nevracia). */
+export type LicenseReminder = {
+  kind: "FIREARM" | "SBS";
+  /** Dátum platnosti ako RRRR-MM-DD. */
+  validUntil: string;
+  phoneLast3: string;
+};
+
 /** Adresy obrazoviek pre typované trasy Expo Routeru. */
 export type LicenseHref = "/firearm-license" | "/sbs-license";
 
 export type LicenseCardItem = {
   id: string;
   title: string;
+  kind: LicenseKind;
   icon: ReactNode;
   href: LicenseHref;
 };
