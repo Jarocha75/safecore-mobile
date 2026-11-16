@@ -7,6 +7,8 @@ export type LicenseFormValues = {
   licenseNumber: string;
   validUntil: Date | null;
   phone: string;
+  /** Súhlas so zasielaním SMS upozornení. */
+  smsConsent: boolean;
 };
 
 /** Hodnoty po úspešnej validácii (dátum platnosti je už povinný). */

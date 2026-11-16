@@ -10,12 +10,17 @@ import type {
   LicenseFormValues,
 } from "@/types/license";
 import { formatPhone } from "@/utils/phone";
+import ConsentCheckbox from "@/components/forms/ConsentCheckbox";
+import { useSession } from "@/context/SessionContext";
+import { ApiError } from "@/utils/api";
+import { saveLicenseReminder } from "@/utils/license-reminders";
 import { createLicenseSchema } from "@/validation/license";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -29,6 +34,7 @@ export default function LicenseFormScreen({
 }: {
   config: LicenseFormConfig;
 }) {
+  const { session } = useSession();
   const schema = useMemo(() => createLicenseSchema(config), [config]);
   // Platnosť preukazu: od dnešného dňa najviac 20 rokov dopredu.
   const { minDate, maxDate } = useMemo(() => {
@@ -58,12 +64,32 @@ export default function LicenseFormScreen({
       licenseNumber: "",
       validUntil: null,
       phone: "",
+      smsConsent: false,
     },
   });
 
-  const onSubmit = (_data: LicenseFormData) => {
-    // TODO: odoslať na API / uložiť lokálne (osobné údaje nelogovať)
-    router.back();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const onSubmit = async (data: LicenseFormData) => {
+    if (!session) return;
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      // Osobné údaje nelogovať.
+      await saveLicenseReminder(config.kind, data, session.token);
+      Alert.alert(
+        "Uložené",
+        "SMS upozornenie ti príde 3 mesiace a týždeň pred koncom platnosti.",
+        [{ text: "OK", onPress: () => router.back() }],
+      );
+    } catch (e) {
+      setSubmitError(
+        e instanceof ApiError ? e.message : "Niečo sa pokazilo. Skús to znova.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -160,13 +186,33 @@ export default function LicenseFormScreen({
             )}
           />
 
+          <Controller
+            control={control}
+            name="smsConsent"
+            render={({ field: { value, onChange } }) => (
+              <ConsentCheckbox
+                value={value}
+                onChange={onChange}
+                label="Súhlasím so zasielaním SMS upozornení na uvedené telefónne číslo 3 mesiace a týždeň pred koncom platnosti preukazu. Súhlas môžem kedykoľvek odvolať."
+                error={errors.smsConsent?.message}
+              />
+            )}
+          />
+
+          {submitError ? <Text style={styles.errorText}>{submitError}</Text> : null}
+
           <PressableScale
-            style={styles.saveButton}
-            onPress={() => handleSubmit(onSubmit)()}
+            style={[styles.saveButton, submitting && styles.saveButtonDisabled]}
+            onPress={() => {
+              if (!submitting) void handleSubmit(onSubmit)();
+            }}
             accessibilityRole="button"
             accessibilityLabel="Uložiť"
+            accessibilityState={{ disabled: submitting }}
           >
-            <Text style={styles.saveText}>Uložiť</Text>
+            <Text style={styles.saveText}>
+              {submitting ? "Ukladám…" : "Uložiť"}
+            </Text>
           </PressableScale>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -185,6 +231,13 @@ const styles = StyleSheet.create({
     height: 54,
     justifyContent: "center",
     alignItems: "center",
+  },
+  saveButtonDisabled: { opacity: 0.6 },
+  errorText: {
+    fontFamily: Font.body,
+    fontSize: 14,
+    color: Palette.danger,
+    marginBottom: 8,
   },
   saveText: { fontFamily: Font.bodySemiBold, fontSize: 17, color: Palette.onPrimary },
 });

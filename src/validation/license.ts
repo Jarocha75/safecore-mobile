@@ -29,5 +29,8 @@ export function createLicenseSchema(config: LicenseFormConfig) {
       .regex(LICENSE_NUMBER_PATTERN, config.numberInvalidMessage),
     validUntil: z.date({ error: "Vyber dátum platnosti." }),
     phone: z.string().refine(isValidPhone, "Zadaj platné telefónne číslo."),
+    smsConsent: z
+      .boolean()
+      .refine((v) => v, "Pre SMS upozornenia je potrebný súhlas."),
   });
 }

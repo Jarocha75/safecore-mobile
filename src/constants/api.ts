@@ -15,6 +15,8 @@ export const ApiPath = {
   /** Registrácia Expo push tokenu zariadenia k účtu. */
   pushToken: "/api/mobile/push-token",
   pushTokenRemove: "/api/mobile/push-token/remove",
+  /** SMS upozornenia na koniec platnosti preukazu (PUT uloží, DELETE?kind= zruší). */
+  licenseReminders: "/api/mobile/license-reminders",
   courseTests: (courseId: string) =>
     `/api/mobile/courses/${encodeURIComponent(courseId)}/tests`,
   /** Každé volanie zloží nový cvičný test (kurz S). */
