@@ -12,6 +12,9 @@ export const ApiPath = {
   me: "/api/mobile/me",
   /** Verejný endpoint webu – pošle e-mail s odkazom na obnovenie hesla (heslo sa mení na webe). */
   forgotPassword: "/api/forgot-password",
+  /** Registrácia Expo push tokenu zariadenia k účtu. */
+  pushToken: "/api/mobile/push-token",
+  pushTokenRemove: "/api/mobile/push-token/remove",
   courseTests: (courseId: string) =>
     `/api/mobile/courses/${encodeURIComponent(courseId)}/tests`,
   /** Každé volanie zloží nový cvičný test (kurz S). */

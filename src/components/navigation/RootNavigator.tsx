@@ -17,11 +17,13 @@ import OfflineBanner from "@/components/ui/OfflineBanner";
 
 import { Palette } from "@/constants/palette";
 import { useSession } from "@/context/SessionContext";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootNavigator() {
   const { session, isLoading } = useSession();
+  usePushNotifications();
   const [loaded, error] = useFonts({
     Barlow_400Regular,
     Barlow_500Medium,

@@ -18,6 +18,7 @@ import {
   setVerifiedHandler,
 } from "@/utils/api";
 import { clearApiCache } from "@/utils/api-cache";
+import { unregisterPushToken } from "@/utils/push";
 import {
   clearStoredSession,
   loadStoredCourses,
@@ -55,6 +56,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   // V ref, nie v state – obnovuje sa pri každej odpovedi a nemá prekresľovať obrazovky.
   const verifiedAtRef = useRef(0);
   const lastSavedRef = useRef(0);
+  // Token aktuálnej relácie pre odhlásenie (signOut sa volá aj zo starých closure).
+  const tokenRef = useRef<string | null>(null);
 
   const isOfflineAccessValid = useCallback(
     () => Date.now() - verifiedAtRef.current < OFFLINE_ACCESS_MS,
@@ -63,6 +66,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     verifiedAtRef.current = 0;
+    const token = tokenRef.current;
+    tokenRef.current = null;
+    if (token) await unregisterPushToken(token);
     await Promise.all([clearStoredSession(), clearApiCache()]);
     setSession(null);
   };
@@ -78,6 +84,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
     await saveStoredSession({ token, user: me.user });
     await saveStoredCourses(me.courses);
+    tokenRef.current = token;
     setSession({ token, user: me.user, courses: me.courses });
   };
 
@@ -114,6 +121,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         const verifiedAt = (await loadVerifiedAt()) ?? Date.now();
         if (cancelled) return;
         verifiedAtRef.current = verifiedAt;
+        tokenRef.current = stored.token;
         setSession({ ...stored, courses: storedCourses });
       }
       setIsLoading(false);
