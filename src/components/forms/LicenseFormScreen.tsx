@@ -13,12 +13,14 @@ import { formatPhone } from "@/utils/phone";
 import ReminderStatusCard from "@/components/license/ReminderStatusCard";
 import { useLicenseReminders } from "@/hooks/useLicenseReminders";
 import ConsentCheckbox from "@/components/forms/ConsentCheckbox";
+import { PRIVACY_POLICY_URL } from "@/constants/links";
 import { useSession } from "@/context/SessionContext";
 import { ApiError } from "@/utils/api";
 import { saveLicenseReminder } from "@/utils/license-reminders";
 import { createLicenseSchema } from "@/validation/license";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import { openBrowserAsync } from "expo-web-browser";
 import { useMemo, useState } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import {
@@ -205,7 +207,9 @@ export default function LicenseFormScreen({
               <ConsentCheckbox
                 value={value}
                 onChange={onChange}
-                label="Súhlasím so zasielaním SMS upozornení na uvedené telefónne číslo 3 mesiace a týždeň pred koncom platnosti preukazu. Súhlas môžem kedykoľvek odvolať."
+                label="Súhlasím so zasielaním SMS upozornení na uvedené telefónne číslo 3 mesiace a týždeň pred koncom platnosti preukazu. Súhlas môžem kedykoľvek odvolať v aplikácii (Zrušiť upozornenie) alebo e-mailom."
+                linkLabel="Zásady ochrany osobných údajov"
+                onLinkPress={() => void openBrowserAsync(PRIVACY_POLICY_URL)}
                 error={errors.smsConsent?.message}
               />
             )}

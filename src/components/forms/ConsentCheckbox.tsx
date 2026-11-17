@@ -9,6 +9,9 @@ type ConsentCheckboxProps = {
   onChange: (value: boolean) => void;
   label: string;
   error?: string;
+  /** Voliteľný odkaz pod textom (napr. na zásady ochrany osobných údajov). */
+  linkLabel?: string;
+  onLinkPress?: () => void;
 };
 
 /** Zaškrtávacie pole so súhlasom (text je celý klikateľný). */
@@ -17,6 +20,8 @@ export default function ConsentCheckbox({
   onChange,
   label,
   error,
+  linkLabel,
+  onLinkPress,
 }: ConsentCheckboxProps) {
   return (
     <View style={styles.wrapper}>
@@ -34,6 +39,16 @@ export default function ConsentCheckbox({
         </View>
         <Text style={styles.label}>{label}</Text>
       </Pressable>
+      {linkLabel && onLinkPress ? (
+        <Pressable
+          onPress={onLinkPress}
+          style={styles.link}
+          accessibilityRole="link"
+          accessibilityLabel={linkLabel}
+        >
+          <Text style={styles.linkText}>{linkLabel}</Text>
+        </Pressable>
+      ) : null}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
@@ -61,6 +76,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: Palette.textSecondary,
+  },
+  link: { marginTop: 8, marginLeft: 36, alignSelf: "flex-start" },
+  linkText: {
+    fontFamily: Font.bodySemiBold,
+    fontSize: 14,
+    color: Palette.primary,
+    textDecorationLine: "underline",
   },
   errorText: { marginTop: 6, fontFamily: Font.body, fontSize: 14, color: Palette.danger },
 });
