@@ -13,6 +13,12 @@ export const SETTINGS_MENU: ProfileMenuItemData[] = [
 
 export const ABOUT_MENU: ProfileMenuItemData[] = [
   {
+    id: "terms",
+    label: "Podmienky používania",
+    icon: "document-text-outline",
+    onPress: () => router.push("/terms"),
+  },
+  {
     id: "about",
     label: "O SafeCore (Verzia 1.0.0)",
     icon: "information-circle-outline",
