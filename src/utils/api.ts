@@ -45,6 +45,7 @@ export async function apiFetch<T>(
   const timer = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
 
   let response: Response;
+  let data: (T & { error?: string }) | null;
   try {
     response = await fetch(`${API_URL}${path}`, {
       method,
@@ -56,15 +57,16 @@ export async function apiFetch<T>(
       body: body !== undefined ? JSON.stringify(body) : undefined,
       signal: controller.signal,
     });
+    // Časovač beží, kým sa neprečíta aj telo odpovede (zaseknuté spojenie po hlavičkách).
+    data = (await response.json().catch(() => {
+      if (controller.signal.aborted) throw new Error("timeout");
+      return null;
+    })) as (T & { error?: string }) | null;
   } catch {
     throw new ApiError(0, NETWORK_ERROR);
   } finally {
     clearTimeout(timer);
   }
-
-  const data = (await response.json().catch(() => null)) as
-    | (T & { error?: string })
-    | null;
 
   if (!response.ok) {
     if (response.status === 401 && token) unauthorizedHandler?.();

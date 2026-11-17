@@ -80,7 +80,13 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
         );
       } catch (error) {
         if (cancelled) return;
-        if (cached && error instanceof ApiError && error.status === 0) {
+        // Kópia ostane pri výpadku siete aj pri chybe servera (5xx, napr. počas nasadenia);
+        // zahodí sa len pri odmietnutí (401/403/404 …).
+        if (
+          cached &&
+          error instanceof ApiError &&
+          (error.status === 0 || error.status >= 500)
+        ) {
           setState((prev) => ({ ...prev, offline: true, unreachable: true }));
           return;
         }

@@ -58,6 +58,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const lastSavedRef = useRef(0);
   // Token aktuálnej relácie pre odhlásenie (signOut sa volá aj zo starých closure).
   const tokenRef = useRef<string | null>(null);
+  // Zvyšuje sa pri každom odhlásení/prihlásení; oneskorená odpoveď zo starej relácie sa podľa neho zahodí.
+  const epochRef = useRef(0);
 
   const isOfflineAccessValid = useCallback(
     () => Date.now() - verifiedAtRef.current < OFFLINE_ACCESS_MS,
@@ -65,12 +67,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   );
 
   const signOut = async () => {
+    epochRef.current += 1;
     verifiedAtRef.current = 0;
     const token = tokenRef.current;
     tokenRef.current = null;
-    if (token) await unregisterPushToken(token);
     await Promise.all([clearStoredSession(), clearApiCache()]);
     setSession(null);
+    // Odpojenie push tokenu nečaká na sieť, odhlásenie nesmie závisieť od servera.
+    if (token) void unregisterPushToken(token);
   };
 
   const signIn = async (email: string, password: string) => {
@@ -82,6 +86,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     // Do appky patria len zákazníci s kúpeným kurzom.
     if (me.courses.length === 0) throw new ApiError(403, NO_COURSE_MESSAGE);
 
+    epochRef.current += 1;
     await saveStoredSession({ token, user: me.user });
     await saveStoredCourses(me.courses);
     tokenRef.current = token;
@@ -126,6 +131,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       }
       setIsLoading(false);
       if (!stored) return;
+      const epoch = epochRef.current;
 
       // Obnova kurzov na pozadí. 401 (vypršaný token) rieši unauthorizedHandler,
       // pri chybe siete ostáva používateľ prihlásený.
@@ -133,7 +139,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         const me = await apiFetch<MeResponse>(ApiPath.me, {
           token: stored.token,
         });
-        if (cancelled) return;
+        // Medzitým sa používateľ odhlásil (alebo prihlásil inak) – odpoveď už neplatí.
+        if (cancelled || epochRef.current !== epoch) return;
         if (me.courses.length === 0) {
           await signOut();
           return;
