@@ -9,7 +9,11 @@
     "userInterfaceStyle": "dark",
     "ios": {
       "bundleIdentifier": "sk.safecore.mobile",
-      "icon": "./assets/expo.icon"
+      "supportsTablet": false,
+      "icon": "./assets/expo.icon",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "sk.safecore.mobile",
@@ -36,6 +40,7 @@
         }
       ],
       "@react-native-community/datetimepicker",
+      "expo-notifications",
       "expo-secure-store",
       "expo-status-bar",
       "expo-web-browser"
