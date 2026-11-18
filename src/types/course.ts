@@ -44,8 +44,6 @@ export type CourseDetail = {
   /** Zhoduje sa s `PrepCourse.id`. */
   courseId: string;
   lawReference: string;
-  /** Stránka kurzu na webe, kde prebieha nákup. */
-  webUrl: string;
   durationUnit: DurationUnit;
   /** Voliteľná poznámka pod osnovou. */
   note?: string;

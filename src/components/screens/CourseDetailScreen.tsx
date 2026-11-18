@@ -1,12 +1,10 @@
-import PressableScale from "@/components/ui/PressableScale";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { COURSE_DETAILS, DURATION_LABELS } from "@/constants/course-details";
 import { Palette } from "@/constants/palette";
 import { PREP_COURSES } from "@/constants/prep-courses";
 import { Font } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type CourseDetailScreenProps = {
@@ -80,35 +78,6 @@ export default function CourseDetailScreen({
           </View>
 
           {detail.note ? <Text style={styles.note}>{detail.note}</Text> : null}
-
-          <View style={styles.cta}>
-            <Text style={styles.ctaTitle}>Pripravený začať štúdium?</Text>
-            <Text style={styles.ctaText}>
-              Kurz si zakúpiš na našom webe. Po zakúpení dostaneš email s
-              odkazom na aktiváciu účtu.
-            </Text>
-            <PressableScale
-              style={styles.ctaButton}
-              onPress={() => {
-                WebBrowser.openBrowserAsync(detail.webUrl).catch(() => {
-                  Alert.alert(
-                    "Stránku sa nepodarilo otvoriť",
-                    "Skús to prosím znova alebo navštív safecore.sk v prehliadači.",
-                  );
-                });
-              }}
-              accessibilityRole="link"
-              accessibilityLabel="Pokračovať na safecore.sk"
-              accessibilityHint="Otvorí webovú stránku, kde si kurz zakúpiš"
-            >
-              <Text style={styles.ctaButtonText}>Pokračovať na safecore.sk</Text>
-              <Ionicons
-                name="open-outline"
-                size={18}
-                color={Palette.onPrimary}
-              />
-            </PressableScale>
-          </View>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -235,38 +204,5 @@ const styles = StyleSheet.create({
     color: Palette.textSecondary,
     lineHeight: 20,
     marginTop: 12,
-  },
-  cta: {
-    marginTop: 28,
-    backgroundColor: Palette.surfaceRaised,
-    borderRadius: 22,
-    padding: 20,
-  },
-  ctaTitle: {
-    fontFamily: Font.displayBold,
-    fontSize: 22,
-    color: Palette.text,
-    marginBottom: 6,
-  },
-  ctaText: {
-    fontFamily: Font.body,
-    fontSize: 15,
-    color: Palette.textButtonSecondary,
-    lineHeight: 21,
-    marginBottom: 16,
-  },
-  ctaButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    backgroundColor: Palette.primary,
-    borderRadius: 14,
-    height: 52,
-  },
-  ctaButtonText: {
-    fontFamily: Font.bodySemiBold,
-    fontSize: 17,
-    color: Palette.onPrimary,
   },
 });

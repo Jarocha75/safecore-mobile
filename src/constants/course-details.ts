@@ -13,7 +13,6 @@ export const COURSE_DETAILS: Record<string, CourseDetail> = {
   "zbrojny-preukaz": {
     courseId: "zbrojny-preukaz",
     lawReference: "zákon č. 190/2003 Z.z. o zbraniach a strelive",
-    webUrl: "https://www.safecore.sk/kurzy/z",
     durationUnit: "minutes",
     subjects: [
       {
@@ -47,7 +46,6 @@ export const COURSE_DETAILS: Record<string, CourseDetail> = {
   "preukaz-s": {
     courseId: "preukaz-s",
     lawReference: "§ 4 vyhlášky MV SR č. 634/2005 Z.z.",
-    webUrl: "https://www.safecore.sk/kurzy/s",
     durationUnit: "teachingHours",
     note: "K tomuto kurzu bude postupne tvorený obsah k spracovaniu jednotlivých tém.",
     subjects: [
@@ -91,7 +89,6 @@ export const COURSE_DETAILS: Record<string, CourseDetail> = {
   "preukaz-p": {
     courseId: "preukaz-p",
     lawReference: "§ 5 vyhlášky MV SR č. 634/2005 Z.z.",
-    webUrl: "https://www.safecore.sk/kurzy/p",
     durationUnit: "teachingHours",
     note: "K tomuto kurzu bude postupne tvorený obsah k spracovaniu jednotlivých tém.",
     subjects: [

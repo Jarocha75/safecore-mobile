@@ -12,6 +12,8 @@ export const ApiPath = {
   me: "/api/mobile/me",
   /** Verejný endpoint webu – pošle e-mail s odkazom na obnovenie hesla (heslo sa mení na webe). */
   forgotPassword: "/api/forgot-password",
+  /** DELETE zmaže účet prihláseného používateľa (vyžaduje ho App Store aj Google Play). */
+  account: "/api/mobile/account",
   /** Registrácia Expo push tokenu zariadenia k účtu. */
   pushToken: "/api/mobile/push-token",
   pushTokenRemove: "/api/mobile/push-token/remove",

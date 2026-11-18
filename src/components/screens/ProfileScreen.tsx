@@ -4,8 +4,11 @@ import { Palette } from "@/constants/palette";
 import { ABOUT_MENU, SETTINGS_MENU } from "@/constants/profile";
 import { useSession } from "@/context/SessionContext";
 import { Font } from "@/constants/typography";
+import { ApiPath } from "@/constants/api";
+import { ApiError, apiFetch } from "@/utils/api";
 import { Ionicons } from "@expo/vector-icons";
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
@@ -18,6 +21,48 @@ export default function ProfileScreen() {
       { text: "Zrušiť", style: "cancel" },
       { text: "Odhlásiť sa", style: "destructive", onPress: () => void signOut() },
     ]);
+  };
+
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteAccount = async () => {
+    if (!session || isDeleting) return;
+    setIsDeleting(true);
+    try {
+      await apiFetch<{ ok: true }>(ApiPath.account, {
+        method: "DELETE",
+        token: session.token,
+      });
+      await signOut();
+    } catch (error) {
+      Alert.alert(
+        "Účet sa nepodarilo zmazať",
+        error instanceof ApiError
+          ? error.message
+          : "Skús to prosím znova alebo nás kontaktuj cez safecore.sk.",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const confirmDeleteAccount = () => {
+    Alert.alert(
+      "Zmazať účet",
+      "Účet a osobné údaje spojené s appkou sa nenávratne zmažú, vrátane postupu v testoch a SMS upozornení. Účet na webe a prístup ku kurzu zaniknú tiež.",
+      [
+        { text: "Zrušiť", style: "cancel" },
+        {
+          text: "Pokračovať",
+          style: "destructive",
+          onPress: () =>
+            Alert.alert("Naozaj zmazať účet?", "Túto akciu nie je možné vrátiť späť.", [
+              { text: "Zrušiť", style: "cancel" },
+              { text: "Zmazať účet", style: "destructive", onPress: () => void deleteAccount() },
+            ]),
+        },
+      ],
+    );
   };
 
   return (
@@ -59,6 +104,21 @@ export default function ProfileScreen() {
         >
           <Ionicons name="log-out-outline" size={20} color={Palette.danger} />
           <Text style={styles.logoutText}>Odhlásiť sa</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={confirmDeleteAccount}
+          disabled={isDeleting}
+          accessibilityRole="button"
+          accessibilityLabel="Zmazať účet"
+          accessibilityState={{ disabled: isDeleting, busy: isDeleting }}
+        >
+          {isDeleting ? (
+            <ActivityIndicator color={Palette.danger} />
+          ) : (
+            <Text style={styles.deleteText}>Zmazať účet</Text>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -140,5 +200,17 @@ const styles = StyleSheet.create({
     fontFamily: Font.bodySemiBold,
     fontSize: 16,
     color: Palette.danger,
+  },
+  deleteButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 48,
+    marginTop: 12,
+  },
+  deleteText: {
+    fontFamily: Font.body,
+    fontSize: 15,
+    color: Palette.textSecondary,
+    textDecorationLine: "underline",
   },
 });
