@@ -18,6 +18,7 @@ import {
   setVerifiedHandler,
 } from "@/utils/api";
 import { clearApiCache } from "@/utils/api-cache";
+import { clearAllStoredLicenses } from "@/utils/license-storage";
 import { unregisterPushToken } from "@/utils/push";
 import {
   clearStoredSession,
@@ -71,7 +72,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     verifiedAtRef.current = 0;
     const token = tokenRef.current;
     tokenRef.current = null;
-    await Promise.all([clearStoredSession(), clearApiCache()]);
+    await Promise.all([
+      clearStoredSession(),
+      clearApiCache(),
+      clearAllStoredLicenses(),
+    ]);
     setSession(null);
     // Odpojenie push tokenu nečaká na sieť, odhlásenie nesmie závisieť od servera.
     if (token) void unregisterPushToken(token);

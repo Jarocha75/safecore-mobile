@@ -16,12 +16,14 @@ import ConsentCheckbox from "@/components/forms/ConsentCheckbox";
 import { PRIVACY_POLICY_URL } from "@/constants/links";
 import { useSession } from "@/context/SessionContext";
 import { ApiError } from "@/utils/api";
-import { saveLicenseReminder } from "@/utils/license-reminders";
+import { saveLicenseReminder, toDateOnly } from "@/utils/license-reminders";
+import { loadStoredLicense, saveStoredLicense } from "@/utils/license-storage";
+import { parseIsoDate } from "@/utils/date";
 import { createLicenseSchema } from "@/validation/license";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import {
   Alert,
@@ -54,7 +56,9 @@ export default function LicenseFormScreen({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    getValues,
+    reset,
+    formState: { errors, isDirty },
   } = useForm<LicenseFormValues, unknown, LicenseFormData>({
     // Schéma odmietne null v validUntil, preto je výstupný typ LicenseFormData.
     // Chyba sa ukáže hneď po opustení poľa, potom sa kontroluje pri písaní.
@@ -74,6 +78,28 @@ export default function LicenseFormScreen({
     },
   });
 
+  // Pri úprave predvyplníme údaje uložené v telefóne (telefón a súhlas sa zadávajú znova).
+  useEffect(() => {
+    let cancelled = false;
+    void loadStoredLicense(config.kind).then((saved) => {
+      if (cancelled || !saved || isDirty) return;
+      const validUntil = parseIsoDate(saved.validUntil);
+      reset({
+        ...getValues(),
+        firstName: saved.firstName,
+        lastName: saved.lastName,
+        licenseNumber: saved.licenseNumber,
+        // Vypršaný dátum minimálny dátum odmietne, pri obnove sa zadáva nový.
+        validUntil: validUntil >= minDate ? validUntil : null,
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+    // Načítanie len raz pri otvorení formulára.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -84,6 +110,13 @@ export default function LicenseFormScreen({
     try {
       // Osobné údaje nelogovať.
       await saveLicenseReminder(config.kind, data, session.token);
+      // Meno a číslo preukazu zostávajú len v telefóne (server ich nedostane).
+      await saveStoredLicense(config.kind, {
+        firstName: data.firstName.trim(),
+        lastName: data.lastName.trim(),
+        licenseNumber: data.licenseNumber.trim(),
+        validUntil: toDateOnly(data.validUntil),
+      });
       Alert.alert(
         "Uložené",
         "SMS upozornenie ti príde 3 mesiace a týždeň pred koncom platnosti.",

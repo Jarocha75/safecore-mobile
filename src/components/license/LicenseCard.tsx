@@ -1,44 +1,50 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, type Href } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 import PressableScale from "@/components/ui/PressableScale";
 import { CardStyles } from "@/constants/card-styles";
 import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
-import type { LicenseCardItem, LicenseReminder } from "@/types/license";
-import { formatIsoDate } from "@/utils/date";
+import type { LicenseCardItem } from "@/types/license";
 
 type LicenseCardProps = {
   license: LicenseCardItem;
-  reminder: LicenseReminder | null;
-  /** Aj pri vypnutom upozornení zobraziť stav (obrazovka Notifikácie). */
-  showOffStatus?: boolean;
+  /** Kam karta vedie (detail preukazu alebo formulár upozornenia). */
+  href: Href;
+  /** Druhý riadok pod názvom (stav platnosti alebo stav SMS upozornenia). */
+  subtitle?: string | null;
+  /** Farba druhého riadku; predvolene sivá. */
+  subtitleColor?: string;
 };
 
-/** Karta typu preukazu so stavom SMS upozornenia; ťuknutím sa otvorí formulár. */
+/** Riadková karta typu preukazu s krátkym stavom; ťuknutím sa otvorí `href`. */
 export default function LicenseCard({
   license,
-  reminder,
-  showOffStatus,
+  href,
+  subtitle,
+  subtitleColor,
 }: LicenseCardProps) {
-  const subtitle = reminder
-    ? `SMS upozornenie · platnosť do ${formatIsoDate(reminder.validUntil)}`
-    : showOffStatus
-      ? "SMS upozornenie nie je zapnuté"
-      : null;
-
   return (
     <PressableScale
       style={CardStyles.listCard}
-      onPress={() => router.push(license.href)}
+      onPress={() => router.push(href)}
       accessibilityRole="button"
       accessibilityLabel={license.title}
     >
       <View style={CardStyles.iconBox}>{license.icon}</View>
       <View style={styles.text}>
         <Text style={styles.title}>{license.title}</Text>
-        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+        {subtitle ? (
+          <Text
+            style={[
+              styles.subtitle,
+              subtitleColor ? { color: subtitleColor } : null,
+            ]}
+          >
+            {subtitle}
+          </Text>
+        ) : null}
       </View>
       <Ionicons name="chevron-forward" size={18} color={Palette.icon} />
     </PressableScale>

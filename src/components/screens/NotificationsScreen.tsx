@@ -7,6 +7,7 @@ import { LICENSES } from "@/constants/licenses";
 import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
 import { useLicenseReminders } from "@/hooks/useLicenseReminders";
+import { formatIsoDate } from "@/utils/date";
 
 /** Nastavenie notifikácií: SMS upozornenia na koniec platnosti preukazov. */
 export default function NotificationsScreen() {
@@ -26,14 +27,21 @@ export default function NotificationsScreen() {
           Ťuknutím na preukaz upozornenie zapneš, zmeníš alebo zrušíš.
         </Text>
 
-        {LICENSES.map((license) => (
-          <LicenseCard
-            key={license.id}
-            license={license}
-            reminder={find(license.kind)}
-            showOffStatus
-          />
-        ))}
+        {LICENSES.map((license) => {
+          const reminder = find(license.kind);
+          return (
+            <LicenseCard
+              key={license.id}
+              license={license}
+              href={license.href}
+              subtitle={
+                reminder
+                  ? `SMS upozornenie · platnosť do ${formatIsoDate(reminder.validUntil)}`
+                  : "SMS upozornenie nie je zapnuté"
+              }
+            />
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );

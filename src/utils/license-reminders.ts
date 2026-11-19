@@ -9,7 +9,7 @@ export const SERVER_KIND: Record<LicenseKind, "FIREARM" | "SBS"> = {
 };
 
 /** Dátum ako RRRR-MM-DD podľa lokálneho času (toISOString by ho mohol posunúť o deň). */
-function toDateOnly(date: Date): string {
+export function toDateOnly(date: Date): string {
   const m = String(date.getMonth() + 1).padStart(2, "0");
   const d = String(date.getDate()).padStart(2, "0");
   return `${date.getFullYear()}-${m}-${d}`;
