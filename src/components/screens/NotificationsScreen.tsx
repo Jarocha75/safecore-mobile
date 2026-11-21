@@ -24,7 +24,7 @@ export default function NotificationsScreen() {
         <Text style={styles.sectionTitle}>SMS upozornenia</Text>
         <Text style={styles.description}>
           Pošleme ti SMS 3 mesiace a týždeň pred koncom platnosti preukazu.
-          Ťuknutím na preukaz upozornenie zapneš, zmeníš alebo zrušíš.
+          Ťuknutím na preukaz otvoríš jeho detail, kde upozornenie zapneš, zmeníš alebo zrušíš.
         </Text>
 
         {LICENSES.map((license) => {
@@ -33,7 +33,7 @@ export default function NotificationsScreen() {
             <LicenseCard
               key={license.id}
               license={license}
-              href={license.href}
+              href={license.detailHref}
               subtitle={
                 reminder
                   ? `SMS upozornenie · platnosť do ${formatIsoDate(reminder.validUntil)}`
