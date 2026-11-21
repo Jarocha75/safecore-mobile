@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "974191560971",
+    "project_id": "safecore-mobile",
+    "storage_bucket": "safecore-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974191560971:android:37198d96197dc6a138fa0e",
+        "android_client_info": {
+          "package_name": "sk.safecore.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiH2V1UaIdqUduyhr7VnvJmBzYwIJzJNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
