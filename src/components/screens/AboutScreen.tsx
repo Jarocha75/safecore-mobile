@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { openBrowserAsync } from "expo-web-browser";
 import { Alert, Linking, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,10 +32,13 @@ export default function AboutScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.hero}>
-          <View style={styles.logoBox}>
-            <Ionicons name="shield-checkmark" size={36} color={Palette.primary} />
-          </View>
-          <Text style={styles.appName}>SafeCore</Text>
+          {/* Logo už obsahuje názov firmy, preto bez samostatného textu. */}
+          <Image
+            source={require("@/assets/logo/logo-dark-removebg-preview.png")}
+            style={styles.logo}
+            contentFit="contain"
+            accessibilityLabel="SafeCore logo"
+          />
           {APP_VERSION ? (
             <Text style={styles.version}>Verzia {APP_VERSION}</Text>
           ) : null}
@@ -77,16 +81,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Palette.background },
   scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 40 },
   hero: { alignItems: "center", marginBottom: 24 },
-  logoBox: {
-    width: 72,
-    height: 72,
-    borderRadius: 20,
-    backgroundColor: Palette.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
-  appName: { fontFamily: Font.displayBold, fontSize: 26, color: Palette.text },
+  logo: { width: 200, height: 200, marginTop: -16, marginBottom: -24 },
   version: {
     fontFamily: Font.body,
     fontSize: 14,
