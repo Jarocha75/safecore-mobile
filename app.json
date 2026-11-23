@@ -10,7 +10,7 @@
     "ios": {
       "bundleIdentifier": "sk.safecore.mobile",
       "supportsTablet": false,
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -37,7 +37,7 @@
         {
           "backgroundColor": "#121824",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 200
         }
       ],
       "@react-native-community/datetimepicker",
