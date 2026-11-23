@@ -16,3 +16,14 @@ export type LegalLink = {
   url: string;
   icon: ComponentProps<typeof Ionicons>["name"];
 };
+
+/** Položka na obrazovke „O SafeCore“ (kontakt alebo odkaz); `url` sa otvorí cez systém alebo prehliadač. */
+export type AboutLink = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  url: string;
+  icon: ComponentProps<typeof Ionicons>["name"];
+  /** Web sa otvorí v appke (prehliadač), mailto:/tel: odovzdá systému. */
+  external: boolean;
+};

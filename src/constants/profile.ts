@@ -1,10 +1,7 @@
-import Constants from "expo-constants";
 import { router } from "expo-router";
 
+import { APP_VERSION } from "@/constants/about";
 import type { ProfileMenuItemData } from "@/types/profile";
-
-/** Verzia appky z `app.json` (`expo.version`). */
-const APP_VERSION = Constants.expoConfig?.version ?? "";
 
 export const SETTINGS_MENU: ProfileMenuItemData[] = [
   {
@@ -26,5 +23,6 @@ export const ABOUT_MENU: ProfileMenuItemData[] = [
     id: "about",
     label: APP_VERSION ? `O SafeCore (Verzia ${APP_VERSION})` : "O SafeCore",
     icon: "information-circle-outline",
+    onPress: () => router.push("/about"),
   },
 ];
