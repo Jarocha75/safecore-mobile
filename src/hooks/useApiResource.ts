@@ -17,6 +17,15 @@ type ResourceState<T> = {
   unreachable: boolean;
 };
 
+const INITIAL_STATE = {
+  data: null,
+  error: null,
+  loading: true,
+  offline: false,
+  savedAt: null,
+  unreachable: false,
+} as const;
+
 type Options = {
   /** False pre zdroje, ktoré sa pri každom volaní skladajú nanovo (cvičný test). */
   cache?: boolean;
@@ -31,14 +40,14 @@ export function useApiResource<T>(path: string, { cache = true }: Options = {}) 
   const { session, isOfflineAccessValid } = useSession();
   const token = session?.token;
   const userId = session?.user.id;
-  const [state, setState] = useState<ResourceState<T>>({
-    data: null,
-    error: null,
-    loading: true,
-    offline: false,
-    savedAt: null,
-    unreachable: false,
-  });
+  const [state, setState] = useState<ResourceState<T>>({ ...INITIAL_STATE });
+  // Pri zmene zdroja (alebo používateľa) sa staré dáta zahodia hneď, nie až po načítaní nových.
+  const resourceKey = `${userId ?? ""}:${path}`;
+  const [stateKey, setStateKey] = useState(resourceKey);
+  if (stateKey !== resourceKey) {
+    setStateKey(resourceKey);
+    setState({ ...INITIAL_STATE });
+  }
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {

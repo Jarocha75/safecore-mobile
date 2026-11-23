@@ -49,6 +49,13 @@ export default function QuizRunner({
   );
   const [finished, setFinished] = useState(false);
 
+  // Primitívne hodnoty: objekty `test` a `course` môžu mať pri každom renderi novú identitu
+  // (napr. po obnove z API) a spúšťali by zbytočné zápisy.
+  const testId = test.id;
+  const testTitle = test.title;
+  const courseId = course?.id;
+  const courseTitle = course?.title ?? "Test";
+
   // Postup sa ukladá po každej odpovedi a zmene otázky; po dokončení sa zmaže.
   useEffect(() => {
     if (!userId) return;
@@ -59,17 +66,17 @@ export default function QuizRunner({
     // Test, v ktorom používateľ ešte neodpovedal, nie je „rozpracovaný“.
     if (Object.keys(answers).length === 0) return;
     void saveStudy(userId, {
-      testId: test.id,
-      courseId: course?.id,
-      courseTitle: course?.title ?? "Test",
-      testTitle: test.title,
+      testId,
+      courseId,
+      courseTitle,
+      testTitle,
       questionNumber: index + 1,
       totalQuestions: questions.length,
       order: questions.map((q) => q.id),
       answers,
       index,
     });
-  }, [userId, finished, index, answers, test, course, questions]);
+  }, [userId, finished, index, answers, testId, testTitle, courseId, courseTitle, questions]);
 
   if (finished) {
     return (
