@@ -49,8 +49,10 @@ export default function RootNavigator() {
           contentStyle: { backgroundColor: Palette.background },
         }}
       >
+        {/* "/" musí existovať vždy – appka na nej štartuje aj s uloženým prihlásením. */}
+        <Stack.Screen name="index" />
+
         <Stack.Protected guard={!session}>
-          <Stack.Screen name="index" />
           <Stack.Screen name="login" />
           <Stack.Screen name="forgot-password" />
         </Stack.Protected>
