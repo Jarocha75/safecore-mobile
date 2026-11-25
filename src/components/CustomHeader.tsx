@@ -2,21 +2,15 @@ import { Palette } from "@/constants/palette";
 import { Font } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface CustomHeaderProps {
   title: string;
   description?: string;
-  showNotification?: boolean;
-  onNotificationPress?: () => void;
 }
 
-export default function CustomHeader({
-  title,
-  description,
-  showNotification = true,
-  onNotificationPress,
-}: CustomHeaderProps) {
+export default function CustomHeader({ title, description }: CustomHeaderProps) {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.brandRow}>
@@ -30,24 +24,19 @@ export default function CustomHeader({
           <Text style={styles.brandText}>SafeCore</Text>
         </View>
 
-        {showNotification && (
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={onNotificationPress}
-            disabled={!onNotificationPress}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel="Upozornenia"
-            accessibilityState={{ disabled: !onNotificationPress }}
-          >
-            <Ionicons
-              name="notifications-outline"
-              size={22}
-              color={Palette.textButtonSecondary}
-            />
-            <View style={styles.badge} />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => router.push("/notifications")}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Notifikácie"
+        >
+          <Ionicons
+            name="notifications-outline"
+            size={22}
+            color={Palette.textButtonSecondary}
+          />
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.title}>{title}</Text>
@@ -102,16 +91,5 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.surface,
     justifyContent: "center",
     alignItems: "center",
-  },
-  badge: {
-    position: "absolute",
-    top: 11,
-    right: 12,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Palette.primary,
-    borderWidth: 1.5,
-    borderColor: Palette.surface,
   },
 });
