@@ -9,6 +9,7 @@ import { Font } from "@/constants/typography";
 import { useSession } from "@/context/SessionContext";
 import type { QuizAnswers, QuizTest } from "@/types/quiz";
 import type { SavedStudy } from "@/types/study";
+import { updateUnfinishedReminder } from "@/utils/local-notifications";
 import { shuffle } from "@/utils/quiz";
 import { clearStudy, saveStudy } from "@/utils/study-storage";
 
@@ -61,11 +62,12 @@ export default function QuizRunner({
     if (!userId) return;
     if (finished) {
       void clearStudy(userId);
+      void updateUnfinishedReminder(userId, null);
       return;
     }
     // Test, v ktorom používateľ ešte neodpovedal, nie je „rozpracovaný“.
     if (Object.keys(answers).length === 0) return;
-    void saveStudy(userId, {
+    const study: SavedStudy = {
       testId,
       courseId,
       courseTitle,
@@ -75,7 +77,9 @@ export default function QuizRunner({
       order: questions.map((q) => q.id),
       answers,
       index,
-    });
+    };
+    void saveStudy(userId, study);
+    void updateUnfinishedReminder(userId, study);
   }, [userId, finished, index, answers, testId, testTitle, courseId, courseTitle, questions]);
 
   if (finished) {

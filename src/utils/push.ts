@@ -1,13 +1,12 @@
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { AndroidImportance } from "expo-notifications";
 import { Platform } from "react-native";
 
 import { ApiPath } from "@/constants/api";
 import { apiFetch } from "@/utils/api";
-
-const ANDROID_CHANNEL_ID = "default";
+import { ensureAndroidChannel } from "@/utils/notification-permission";
+import { runNotificationTask } from "@/utils/notification-queue";
 
 /** Notifikácie sa zobrazia aj vtedy, keď je appka otvorená. */
 export function configureNotificationHandler() {
@@ -21,25 +20,13 @@ export function configureNotificationHandler() {
   });
 }
 
-let pushQueue: Promise<unknown> = Promise.resolve();
-
-/**
- * Registráciu a vypnutie pushu spúšťa po jednom, v poradí volania, aby sa pri
- * rýchlom odhlásení/prihlásení neprebehli. Úloha nesmie hádzať chybu.
- */
-export function runPushTask(task: () => Promise<void>) {
-  const next = pushQueue.then(task);
-  pushQueue = next.catch(() => {});
-  return next;
-}
-
 /**
  * Vypne push priamo v zariadení – nezávisle od nášho servera, takže na odhlásený
  * telefón nechodia notifikácie, ani keď sa token na serveri nepodarilo zmazať.
  * Na Androide potrebuje sieť; ak zlyhá, skúsi sa pri ďalšom štarte bez prihlásenia.
  */
 export function disableDevicePush() {
-  return runPushTask(async () => {
+  return runNotificationTask(async () => {
     try {
       // Inak by expo-notifications pri ďalšom štarte zariadenie znova zaregistrovalo.
       await Notifications.setAutoServerRegistrationEnabledAsync(false);
@@ -69,12 +56,7 @@ export async function getExpoPushToken(): Promise<string | null> {
       Constants.easConfig?.projectId;
     if (!projectId) return null;
 
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync(ANDROID_CHANNEL_ID, {
-        name: "SafeCore",
-        importance: AndroidImportance.DEFAULT,
-      });
-    }
+    await ensureAndroidChannel();
 
     let { status } = await Notifications.getPermissionsAsync();
     if (status !== "granted") {

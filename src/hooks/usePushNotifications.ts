@@ -8,19 +8,24 @@ import {
   disableDevicePush,
   getExpoPushToken,
   registerPushToken,
-  runPushTask,
   unregisterPushToken,
 } from "@/utils/push";
+import {
+  cancelLocalReminders,
+  syncLocalReminders,
+} from "@/utils/local-notifications";
+import { runNotificationTask } from "@/utils/notification-queue";
 
 configureNotificationHandler();
 
 /**
- * Po prihlásení zaregistruje push token zariadenia, bez prihlásenia push v zariadení
- * vypne a obsluhuje ťuknutie na notifikáciu.
+ * Po prihlásení zaregistruje push token zariadenia a naplánuje lokálne pripomienky,
+ * bez prihlásenia oboje vypne. Obsluhuje aj ťuknutie na notifikáciu.
  */
 export function usePushNotifications() {
   const { session, isLoading } = useSession();
   const sessionToken = session?.token;
+  const userId = session?.user.id;
 
   useEffect(() => {
     // Kým sa načítava uložená relácia, nevieme, či je niekto prihlásený.
@@ -28,11 +33,12 @@ export function usePushNotifications() {
     if (!sessionToken) {
       // Ručné odhlásenie, vypršaná relácia aj štart appky bez prihlásenia.
       void disableDevicePush();
+      void cancelLocalReminders();
       return;
     }
     let cancelled = false;
 
-    void runPushTask(async () => {
+    void runNotificationTask(async () => {
       if (cancelled) return;
       const pushToken = await getExpoPushToken();
       if (!pushToken || cancelled) return;
@@ -50,6 +56,12 @@ export function usePushNotifications() {
       cancelled = true;
     };
   }, [sessionToken, isLoading]);
+
+  // Lokálne pripomienky sa po prihlásení a štarte naplánujú nanovo. Efekt je za
+  // registráciou pushu, takže v rade počká na odpoveď v dialógu o povolení.
+  useEffect(() => {
+    if (userId) void syncLocalReminders(userId);
+  }, [userId]);
 
   // Ťuknutie na notifikáciu otvorí obrazovku z `data.url` (napr. "/license"),
   // aj keď appka bola zatvorená.

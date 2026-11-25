@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import LicenseCard from "@/components/license/LicenseCard";
+import StudyRemindersSection from "@/components/notifications/StudyRemindersSection";
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { LICENSES } from "@/constants/licenses";
 import { Palette } from "@/constants/palette";
@@ -9,7 +10,7 @@ import { Font } from "@/constants/typography";
 import { useLicenseReminders } from "@/hooks/useLicenseReminders";
 import { formatIsoDate } from "@/utils/date";
 
-/** Nastavenie notifikácií: upozornenia (SMS a push) na koniec platnosti preukazov. */
+/** Nastavenie notifikácií: platnosť preukazov (SMS a push) a lokálne pripomienky štúdia. */
 export default function NotificationsScreen() {
   const { find } = useLicenseReminders();
 
@@ -44,6 +45,8 @@ export default function NotificationsScreen() {
             />
           );
         })}
+
+        <StudyRemindersSection />
       </ScrollView>
     </SafeAreaView>
   );
