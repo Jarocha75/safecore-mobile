@@ -11,6 +11,9 @@
       },
       "android": {
         "buildType": "apk"
+      },
+      "ios": {
+        "image": "macos-tahoe-26.4-xcode-26.4"
       }
     },
     "production": {
@@ -20,6 +23,9 @@
       },
       "android": {
         "buildType": "app-bundle"
+      },
+      "ios": {
+        "image": "macos-tahoe-26.4-xcode-26.4"
       }
     }
   },
