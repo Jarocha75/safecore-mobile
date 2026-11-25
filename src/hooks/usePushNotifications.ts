@@ -5,23 +5,35 @@ import { useEffect, useRef } from "react";
 import { useSession } from "@/context/SessionContext";
 import {
   configureNotificationHandler,
+  disableDevicePush,
   getExpoPushToken,
   registerPushToken,
+  runPushTask,
   unregisterPushToken,
 } from "@/utils/push";
 
 configureNotificationHandler();
 
-/** Po prihlásení zaregistruje push token zariadenia a obsluhuje ťuknutie na notifikáciu. */
+/**
+ * Po prihlásení zaregistruje push token zariadenia, bez prihlásenia push v zariadení
+ * vypne a obsluhuje ťuknutie na notifikáciu.
+ */
 export function usePushNotifications() {
-  const { session } = useSession();
+  const { session, isLoading } = useSession();
   const sessionToken = session?.token;
 
   useEffect(() => {
-    if (!sessionToken) return;
+    // Kým sa načítava uložená relácia, nevieme, či je niekto prihlásený.
+    if (isLoading) return;
+    if (!sessionToken) {
+      // Ručné odhlásenie, vypršaná relácia aj štart appky bez prihlásenia.
+      void disableDevicePush();
+      return;
+    }
     let cancelled = false;
 
-    (async () => {
+    void runPushTask(async () => {
+      if (cancelled) return;
       const pushToken = await getExpoPushToken();
       if (!pushToken || cancelled) return;
       try {
@@ -32,12 +44,12 @@ export function usePushNotifications() {
       }
       // Odhlásenie prebehlo počas registrácie → token hneď odpoj od účtu.
       if (cancelled) void unregisterPushToken(sessionToken);
-    })();
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [sessionToken]);
+  }, [sessionToken, isLoading]);
 
   // Ťuknutie na notifikáciu otvorí obrazovku z `data.url` (napr. "/license"),
   // aj keď appka bola zatvorená.

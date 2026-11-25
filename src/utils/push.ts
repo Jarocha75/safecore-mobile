@@ -21,6 +21,39 @@ export function configureNotificationHandler() {
   });
 }
 
+let pushQueue: Promise<unknown> = Promise.resolve();
+
+/**
+ * Registráciu a vypnutie pushu spúšťa po jednom, v poradí volania, aby sa pri
+ * rýchlom odhlásení/prihlásení neprebehli. Úloha nesmie hádzať chybu.
+ */
+export function runPushTask(task: () => Promise<void>) {
+  const next = pushQueue.then(task);
+  pushQueue = next.catch(() => {});
+  return next;
+}
+
+/**
+ * Vypne push priamo v zariadení – nezávisle od nášho servera, takže na odhlásený
+ * telefón nechodia notifikácie, ani keď sa token na serveri nepodarilo zmazať.
+ * Na Androide potrebuje sieť; ak zlyhá, skúsi sa pri ďalšom štarte bez prihlásenia.
+ */
+export function disableDevicePush() {
+  return runPushTask(async () => {
+    try {
+      // Inak by expo-notifications pri ďalšom štarte zariadenie znova zaregistrovalo.
+      await Notifications.setAutoServerRegistrationEnabledAsync(false);
+    } catch {
+      // nedostupné na tejto platforme
+    }
+    try {
+      await Notifications.unregisterForNotificationsAsync();
+    } catch {
+      // offline alebo nedostupné na tejto platforme
+    }
+  });
+}
+
 /**
  * Vypýta povolenie a vráti Expo push token, alebo null, ak sa nedá
  * (simulátor, zamietnuté povolenie, chýba EAS projekt / iOS entitlement).
@@ -84,6 +117,6 @@ export async function unregisterPushToken(sessionToken: string) {
       token: sessionToken,
     });
   } catch {
-    // offline – server token vyradí sám, keď ho Expo označí za neplatný
+    // offline alebo vypršaná relácia – doručovanie zastaví disableDevicePush()
   }
 }
