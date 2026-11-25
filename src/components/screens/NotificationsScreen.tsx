@@ -9,7 +9,7 @@ import { Font } from "@/constants/typography";
 import { useLicenseReminders } from "@/hooks/useLicenseReminders";
 import { formatIsoDate } from "@/utils/date";
 
-/** Nastavenie notifikácií: SMS upozornenia na koniec platnosti preukazov. */
+/** Nastavenie notifikácií: upozornenia (SMS a push) na koniec platnosti preukazov. */
 export default function NotificationsScreen() {
   const { find } = useLicenseReminders();
 
@@ -21,9 +21,11 @@ export default function NotificationsScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.sectionTitle}>SMS upozornenia</Text>
+        <Text style={styles.sectionTitle}>Upozornenia na platnosť preukazu</Text>
         <Text style={styles.description}>
-          Pošleme ti SMS 3 mesiace a týždeň pred koncom platnosti preukazu.
+          Pošleme ti SMS 3 mesiace a týždeň pred koncom platnosti preukazu. Pri
+          povolených notifikáciách ti počas prihlásenia v appke príde aj
+          upozornenie do telefónu.
           Ťuknutím na preukaz otvoríš jeho detail, kde upozornenie zapneš, zmeníš alebo zrušíš.
         </Text>
 
@@ -36,8 +38,8 @@ export default function NotificationsScreen() {
               href={license.detailHref}
               subtitle={
                 reminder
-                  ? `SMS upozornenie · platnosť do ${formatIsoDate(reminder.validUntil)}`
-                  : "SMS upozornenie nie je zapnuté"
+                  ? `Upozornenie zapnuté · platnosť do ${formatIsoDate(reminder.validUntil)}`
+                  : "Upozornenie nie je zapnuté"
               }
             />
           );
