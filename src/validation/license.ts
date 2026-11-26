@@ -17,20 +17,28 @@ function nameSchema(requiredMessage: string, label: string) {
 }
 
 export function createLicenseSchema(config: LicenseFormConfig) {
-  return z.object({
-    firstName: nameSchema("Zadaj meno.", "Meno"),
-    lastName: nameSchema("Zadaj priezvisko.", "Priezvisko"),
-    licenseNumber: z
-      .string()
-      .trim()
-      .min(1, config.numberRequiredMessage)
-      .min(5, config.numberInvalidMessage)
-      .max(20, config.numberInvalidMessage)
-      .regex(LICENSE_NUMBER_PATTERN, config.numberInvalidMessage),
-    validUntil: z.date({ error: "Vyber dátum platnosti." }),
-    phone: z.string().refine(isValidPhone, "Zadaj platné telefónne číslo."),
-    smsConsent: z
-      .boolean()
-      .refine((v) => v, "Pre SMS upozornenia je potrebný súhlas."),
-  });
+  return (
+    z
+      .object({
+        firstName: nameSchema("Zadaj meno.", "Meno"),
+        lastName: nameSchema("Zadaj priezvisko.", "Priezvisko"),
+        licenseNumber: z
+          .string()
+          .trim()
+          .min(1, config.numberRequiredMessage)
+          .min(5, config.numberInvalidMessage)
+          .max(20, config.numberInvalidMessage)
+          .regex(LICENSE_NUMBER_PATTERN, config.numberInvalidMessage),
+        validUntil: z.date({ error: "Vyber dátum platnosti." }),
+        phone: z.string(),
+        smsConsent: z.boolean(),
+      })
+      // Telefón je povinný len pri zapnutom SMS upozornení.
+      .refine((data) => !data.smsConsent || isValidPhone(data.phone), {
+        path: ["phone"],
+        error: "Zadaj platné telefónne číslo.",
+        // Bez `when` by sa kontrola spustila až po vyplnení všetkých ostatných polí.
+        when: () => true,
+      })
+  );
 }

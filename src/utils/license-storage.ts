@@ -18,15 +18,16 @@ export async function loadStoredLicense(
   }
 }
 
-/** Uloží údaje preukazu len do telefónu. Osobné údaje nelogovať. */
+/** Uloží údaje preukazu len do telefónu; vráti, či sa to podarilo. Osobné údaje nelogovať. */
 export async function saveStoredLicense(
   kind: LicenseKind,
   license: StoredLicense,
 ) {
   try {
     await SecureStore.setItemAsync(keyFor(kind), JSON.stringify(license));
+    return true;
   } catch {
-    // Lokálna kópia je len pohodlie – SMS upozornenie sa uložilo na server.
+    return false;
   }
 }
 
@@ -34,7 +35,7 @@ export async function clearStoredLicense(kind: LicenseKind) {
   try {
     await SecureStore.deleteItemAsync(keyFor(kind));
   } catch {
-    // pozri saveStoredLicense
+    // Zlyhanie mazania nesmie zablokovať odhlásenie.
   }
 }
 

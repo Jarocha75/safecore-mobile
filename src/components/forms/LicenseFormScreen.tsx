@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { useEffect, useMemo, useState } from "react";
-import { Controller, useForm, type Resolver } from "react-hook-form";
+import { Controller, useForm, useWatch, type Resolver } from "react-hook-form";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -78,7 +78,9 @@ export default function LicenseFormScreen({
     },
   });
 
-  // Pri úprave predvyplníme údaje uložené v telefóne (telefón a súhlas sa zadávajú znova).
+  const smsConsent = useWatch({ control, name: "smsConsent" });
+
+  // Pri úprave predvyplníme údaje uložené v telefóne (súhlas a telefón sa pri SMS zadávajú znova).
   useEffect(() => {
     let cancelled = false;
     void loadStoredLicense(config.kind).then((saved) => {
@@ -106,20 +108,39 @@ export default function LicenseFormScreen({
   const onSubmit = async (data: LicenseFormData) => {
     if (!session) return;
     setSubmitError(null);
+    const validUntil = toDateOnly(data.validUntil);
+    // Bez nového súhlasu sa server nemení – bežiace upozornenie by ostalo na starom dátume.
+    if (!data.smsConsent && existing && existing.validUntil !== validUntil) {
+      setSubmitError(
+        "SMS upozornenie máš zapnuté na iný dátum. Zaškrtni súhlas a zadaj číslo, aby sa zmenilo, alebo ho najprv zruš tlačidlom hore.",
+      );
+      return;
+    }
     setSubmitting(true);
     try {
       // Osobné údaje nelogovať.
-      await saveLicenseReminder(config.kind, data, session.token);
+      if (data.smsConsent) {
+        await saveLicenseReminder(config.kind, data, session.token);
+      }
       // Meno a číslo preukazu zostávajú len v telefóne (server ich nedostane).
-      await saveStoredLicense(config.kind, {
+      const stored = await saveStoredLicense(config.kind, {
         firstName: data.firstName.trim(),
         lastName: data.lastName.trim(),
         licenseNumber: data.licenseNumber.trim(),
-        validUntil: toDateOnly(data.validUntil),
+        validUntil,
       });
+      // So zapnutým SMS je lokálna kópia len pohodlie, bez neho je to jediné uloženie.
+      if (!stored && !data.smsConsent) {
+        setSubmitError("Údaje sa nepodarilo uložiť do telefónu. Skús to znova.");
+        return;
+      }
       Alert.alert(
         "Uložené",
-        "SMS upozornenie ti príde 3 mesiace a týždeň pred koncom platnosti.",
+        data.smsConsent
+          ? "SMS upozornenie ti príde 3 mesiace a týždeň pred koncom platnosti."
+          : existing
+            ? "Údaje sú uložené v telefóne. SMS upozornenie ostáva zapnuté."
+            : "Údaje sú uložené v telefóne.",
         [{ text: "OK", onPress: () => router.back() }],
       );
     } catch (e) {
@@ -214,39 +235,41 @@ export default function LicenseFormScreen({
           />
           <Controller
             control={control}
-            name="phone"
-            render={({ field: { value, onChange, onBlur } }) => (
-              <Field
-                label="Telefónne číslo"
-                value={value}
-                onChangeText={(text) => onChange(formatPhone(text))}
-                onBlur={onBlur}
-                error={errors.phone?.message}
-                prefix="+"
-                placeholder="421 900 000 000"
-                keyboardType="number-pad"
-                autoComplete="off"
-                textContentType="none"
-                importantForAutofill="no"
-                maxLength={19}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
             name="smsConsent"
             render={({ field: { value, onChange } }) => (
               <ConsentCheckbox
                 value={value}
                 onChange={onChange}
-                label="Súhlasím so zasielaním SMS upozornení na uvedené telefónne číslo 3 mesiace a týždeň pred koncom platnosti preukazu. Súhlas môžem kedykoľvek odvolať v aplikácii (Zrušiť upozornenie) alebo e-mailom."
+                label="Súhlasím so zasielaním SMS upozornení na telefónne číslo, ktoré zadám, 3 mesiace a týždeň pred koncom platnosti preukazu. Súhlas môžem kedykoľvek odvolať v aplikácii (Zrušiť upozornenie) alebo e-mailom."
                 linkLabel="Zásady ochrany osobných údajov"
                 onLinkPress={() => void openBrowserAsync(PRIVACY_POLICY_URL)}
                 error={errors.smsConsent?.message}
               />
             )}
           />
+
+          {smsConsent ? (
+            <Controller
+              control={control}
+              name="phone"
+              render={({ field: { value, onChange, onBlur } }) => (
+                <Field
+                  label="Telefónne číslo"
+                  value={value}
+                  onChangeText={(text) => onChange(formatPhone(text))}
+                  onBlur={onBlur}
+                  error={errors.phone?.message}
+                  prefix="+"
+                  placeholder="421 900 000 000"
+                  keyboardType="number-pad"
+                  autoComplete="off"
+                  textContentType="none"
+                  importantForAutofill="no"
+                  maxLength={19}
+                />
+              )}
+            />
+          ) : null}
 
           {submitError ? <Text style={styles.errorText}>{submitError}</Text> : null}
 
