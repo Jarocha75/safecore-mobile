@@ -63,20 +63,58 @@ firearms licence,SBS,exam,practice tests,security guard,Slovakia,quiz,legislatio
 
 **Description:** same as the full description for Google Play.
 
-**App Review Information → Notes:**
+## Review access
+
+**Never write the demo account passwords into this file** (it is tracked by git). Enter all credentials directly in App Store Connect and Play Console. There are two demo accounts with the same access (courses Z, S and P): a main one and a backup one for testing account deletion. If a reviewer deletes one, recreate it before the next submission.
+
+### App Store Connect → App Review Information
+
+Tick **Sign-in required** and put the main account into the user name and password fields. Fill in the `[BACKUP …]` placeholders only in App Store Connect.
+
+**Notes:**
 ```
-SafeCore is a companion app for existing customers of SafeCore, s.r.o. courses (safecore.sk). Courses are purchased and managed outside the app. The app contains no purchase flow, no offer to buy and no link to a payment page. It only gives users access to content they have already obtained elsewhere (reader-style access, no in-app purchases).
+ABOUT THE APP
+SafeCore is a study companion for existing customers of SafeCore preparation courses in Slovakia. It helps them practise for the firearms licence exam (course Z) and the private security (SBS) professional competence exams (courses S and P). The user interface is in Slovak.
 
-There is no registration in the app: accounts are created on our website after a course is purchased. Sign-in is e-mail + password only. The content is in Slovak.
+SIGN-IN
+Please use the demo account from the sign-in fields. On the first screen tap "Prihlásiť sa" (Sign in), enter the e-mail and password, then tap "Prihlásiť sa" again. The demo account has access to all three courses (Z, S and P).
 
-Test account:
-  E-mail:   <TO BE FILLED IN>
-  Password: <TO BE FILLED IN>
-The account has an active course, so all features are available: practice tests, mock exam, legislation, documents, tips and the licence expiry reminder.
+NO REGISTRATION OR PURCHASES IN THE APP
+The app is sign-in only. It is free to download and is intended for customers who already bought a course on our website. It offers no registration, no purchases and no links or buttons for buying courses.
 
-Account deletion: Profile → Delete account (the app calls DELETE on our API; the account is anonymised and access is removed).
-Push notifications and the SMS reminder for licence expiry are optional and require explicit consent in the app.
-The licence number and name are stored only in the device's secure storage.
+WHERE TO FIND THE MAIN FEATURES
+Bottom tabs: "Domov" (Home), "Testy" (Tests), "Preukaz" (Licence), "Profil" (Profile).
+- Practice tests: "Testy" > choose a course > choose a test.
+- Mock exam (courses S and P): the "Cvičný test" card at the top of the course's test list.
+- Offline use: the "Stiahnuť na offline" (Download for offline use) card in the course's test list.
+- Legislation, forms and study tips: cards on the "Domov" tab.
+- Licence expiry reminders: "Preukaz" tab. SMS reminders are optional and require explicit consent; a phone number is not needed to use the rest of the app.
+- Notification settings: "Profil" > "Notifikácie". Notifications are optional.
+
+ACCOUNT DELETION
+"Profil" tab > "Zmazať účet" (Delete account) at the bottom > "Pokračovať" (Continue) > "Zmazať účet" to confirm.
+Deletion is permanent and removes access to the courses. If you want to test it, please do so last, using the backup account below, so that the main demo account stays available.
+
+BACKUP DEMO ACCOUNT (same access)
+E-mail: [BACKUP E-MAIL]
+Password: [BACKUP PASSWORD]
+
+INDEPENDENCE
+SafeCore is a private company. The app does not represent any government entity.
+```
+
+### Play Console → App content → App access
+
+Add two separate sets of instructions, each with its own user name and password.
+
+**Main account:**
+```
+Tap "Prihlásiť sa" (Sign in), enter the credentials, then tap it again. The account has courses Z, S and P. The app is in Slovak and is sign-in only for existing customers: no registration or purchases. Tests are in the "Testy" tab. Account deletion: "Profil" > "Zmazať účet" > "Pokračovať" > "Zmazať účet". It is permanent, so please test it last, on the backup account.
+```
+
+**Backup account:**
+```
+Backup account with the same access. Use it to test account deletion.
 ```
 
 **App Privacy (nutrition label):**

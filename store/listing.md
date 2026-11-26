@@ -77,21 +77,7 @@ zbrojný preukaz,SBS,skúška,testy,legislatíva,bezpečnostná služba,zbraň,p
 
 **Popis:** rovnaký ako plný popis pre Google Play.
 
-**Poznámky pre review (App Review Information → Notes):**
-```
-SafeCore je sprievodná aplikácia pre existujúcich zákazníkov kurzov SafeCore, s.r.o. (safecore.sk). Kurzy sa kupujú a spravujú mimo aplikácie; v aplikácii nie je nákup, ponuka nákupu ani odkaz na platbu. Aplikácia len sprístupňuje obsah používateľom, ktorí už majú zákonom povolený prístup (reader-style access, bez nákupov v aplikácii).
-
-Registrácia v aplikácii nie je, účet vzniká na webe po zakúpení kurzu. Prihlásenie je e-mail + heslo.
-
-Testovací účet:
-  E-mail: <DOPLNIŤ>
-  Heslo:  <DOPLNIŤ>
-Účet má aktívny kurz, takže sú dostupné všetky funkcie: testy, cvičná skúška, legislatíva, dokumenty, rady a tipy a upozornenie na platnosť preukazu.
-
-Mazanie účtu: Profil → Zmazať účet (appka volá DELETE na našom API, účet sa anonymizuje a prístup zaniká).
-Notifikácie a SMS upozornenie na platnosť preukazu sú dobrovoľné (výslovný súhlas v aplikácii).
-Číslo ani meno z preukazu sa ukladá len v zabezpečenom úložisku zariadenia.
-```
+**Poznámky pre review a prístupové pokyny (App Store aj Google Play):** anglické texty sú v [listing.en.md](listing.en.md#review-access). Prihlasovacie údaje demo účtov sa zadávajú len priamo v konzolách obchodov, nie do repozitára.
 
 **Zásady súkromia (App Privacy – „nutrition label“):**
 - Údaje spojené s používateľom: Kontaktné údaje (e-mail, meno, telefón – len pri SMS upozornení), Identifikátory (push token zariadenia), Používateľský obsah/postup (výsledky testov).
@@ -115,8 +101,19 @@ Rozmery: iPhone 6,9″ (1320×2868) a 6,5″ (1284×2778) pre App Store; Play: m
 
 ## Čo ešte chýba pred odoslaním
 
-- [ ] Demo účet pre reviewerov (e-mail + heslo do poznámok) s aktívnym kurzom, ideálne bez reálnych osobných údajov.
+Stav k 26. 11. 2026.
+
+- [x] Demo účty pre reviewerov (hlavný a záložný) vytvorené.
+- [ ] Overiť prihlásenie oboma demo účtami: kurzy Z, S a P, test, cvičný test, offline stiahnutie (mazanie účtu na nich neskúšať).
+- [ ] Prihlasovacie údaje zadať v App Store Connect a Play Console.
+- [x] Apple Developer účet overený.
+- [x] Play Console účet organizácie vytvorený, poplatok zaplatený, status obchodníka deklarovaný.
+- [ ] Play Console: overenie totožnosti (Google kontroluje), overenie webu a telefónnych čísel.
+- [ ] Play Console → Obsah aplikácie: status obchodníka pre appku, prístup k appke, Data safety, hodnotenie obsahu.
 - [ ] Screenshoty a feature graphic (Play).
-- [ ] Apple Developer účet (čaká na overenie) a Play Console účet.
-- [ ] Právnik/zodpovedná osoba prejde text na webe (ochrana osobných údajov, Twilio DPF).
+- [ ] App Store Connect: zmeniť názov appky na „SafeCore“, doplniť `ascAppId` do `eas.json`.
+- [ ] Produkčné buildy iOS a Android; Android otestovať na zariadení alebo emulátore (zatiaľ netestovaný).
+- [ ] Otestovať zrušenie pripomienky nedokončeného testu po jeho dokončení a automatickú pripomienku platnosti zo servera.
+- [ ] Právnik/zodpovedná osoba prejde text na webe (ochrana osobných údajov, Twilio DPF; či text a súhlas so SMS pokrývajú aj push).
+- [ ] Popis pre Google Play: overiť, či treba vetu, že appka nezastupuje štátny orgán, a odkazy na oficiálne zdroje (zákony, tlačivá).
 - [ ] Skontrolovať, že popis nepridáva odkaz na nákup (pravidlá obchodov).
