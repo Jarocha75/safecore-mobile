@@ -106,7 +106,7 @@ Stav k 26. 11. 2026.
 - [x] Demo účty pre reviewerov (hlavný a záložný) vytvorené.
 - [x] Demo účty overené v simulátore: oba vidia kurzy Z, S a P; test, cvičný test a offline stiahnutie fungujú (mazanie účtu na nich neskúšať).
 - [ ] Aktualizovať PDF predpisov na webe (`public/dokumenty`) podľa slov-lex.sk: Ústava SR je verzia platná do 4. 8. 1998, zákon 473/2005 do 11. 6. 2026; overiť aj zákon 190/2003 a vyhlášky 634/2005 a 555/2003. Preveriť, či sa zmeny netýkajú testových otázok a rád.
-- [ ] Formulár preukazu: teraz sa neuloží bez telefónu a súhlasu so SMS (ani údaje v telefóne). Navrhnuté: telefón a súhlas vyžadovať len pri zapnutí SMS.
+- [x] Formulár preukazu: údaje sa dajú uložiť len v telefóne; telefón a súhlas sa vyžadujú len pri zapnutí SMS (overené v simulátore). Upravený text súhlasu zahrnúť do právnej kontroly.
 - [ ] Prihlasovacie údaje zadať v App Store Connect a Play Console.
 - [x] Apple Developer účet overený.
 - [x] Play Console účet organizácie vytvorený, poplatok zaplatený, status obchodníka deklarovaný.
