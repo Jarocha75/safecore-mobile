@@ -104,13 +104,15 @@ Rozmery: iPhone 6,9″ (1320×2868) a 6,5″ (1284×2778) pre App Store; Play: m
 Stav k 26. 11. 2026.
 
 - [x] Demo účty pre reviewerov (hlavný a záložný) vytvorené.
-- [ ] Overiť prihlásenie oboma demo účtami: kurzy Z, S a P, test, cvičný test, offline stiahnutie (mazanie účtu na nich neskúšať).
+- [x] Demo účty overené v simulátore: oba vidia kurzy Z, S a P; test, cvičný test a offline stiahnutie fungujú (mazanie účtu na nich neskúšať).
+- [ ] Aktualizovať PDF predpisov na webe (`public/dokumenty`) podľa slov-lex.sk: Ústava SR je verzia platná do 4. 8. 1998, zákon 473/2005 do 11. 6. 2026; overiť aj zákon 190/2003 a vyhlášky 634/2005 a 555/2003. Preveriť, či sa zmeny netýkajú testových otázok a rád.
+- [ ] Formulár preukazu: teraz sa neuloží bez telefónu a súhlasu so SMS (ani údaje v telefóne). Navrhnuté: telefón a súhlas vyžadovať len pri zapnutí SMS.
 - [ ] Prihlasovacie údaje zadať v App Store Connect a Play Console.
 - [x] Apple Developer účet overený.
 - [x] Play Console účet organizácie vytvorený, poplatok zaplatený, status obchodníka deklarovaný.
 - [ ] Play Console: overenie totožnosti (Google kontroluje), overenie webu a telefónnych čísel.
 - [ ] Play Console → Obsah aplikácie: status obchodníka pre appku, prístup k appke, Data safety, hodnotenie obsahu.
-- [ ] Screenshoty a feature graphic (Play).
+- [ ] Screenshoty: iOS zábery 1–4, 6 a 7 (1320×2868) sú v `store/screenshots/ios/`; záber 5 nafotiť po aktualizácii PDF. Pre Play upraviť pomer strán (max 2:1) a pripraviť feature graphic.
 - [ ] App Store Connect: zmeniť názov appky na „SafeCore“, doplniť `ascAppId` do `eas.json`.
 - [ ] Produkčné buildy iOS a Android; Android otestovať na zariadení alebo emulátore (zatiaľ netestovaný).
 - [ ] Otestovať zrušenie pripomienky nedokončeného testu po jeho dokončení a automatickú pripomienku platnosti zo servera.
