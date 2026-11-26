@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import ScreenTopBar from "@/components/ui/ScreenTopBar";
 import { Palette } from "@/constants/palette";
+import { PDF_CACHE_SECONDS } from "@/constants/pdf-collections";
 import { Font } from "@/constants/typography";
 import type { PdfCollection } from "@/types/pdf";
 import {
@@ -91,7 +92,7 @@ export default function PdfViewerScreen({
         </View>
       ) : source ? (
         <Pdf
-          source={{ ...source, cache: true }}
+          source={{ ...source, cache: true, expiration: PDF_CACHE_SECONDS }}
           style={styles.pdf}
           trustAllCerts={false}
           renderActivityIndicator={() => (
