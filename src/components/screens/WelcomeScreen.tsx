@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 1,
     maxHeight: 320,
+    alignSelf: "center",
     marginBottom: 12,
   },
   title: {
