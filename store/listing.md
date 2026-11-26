@@ -101,18 +101,20 @@ Rozmery: iPhone 6,9″ (1320×2868) a 6,5″ (1284×2778) pre App Store; Play: m
 
 ## Čo ešte chýba pred odoslaním
 
-Stav k 26. 11. 2026.
+Stav k 27. 11. 2026.
 
 - [x] Demo účty pre reviewerov (hlavný a záložný) vytvorené.
 - [x] Demo účty overené v simulátore: oba vidia kurzy Z, S a P; test, cvičný test a offline stiahnutie fungujú (mazanie účtu na nich neskúšať).
-- [ ] Aktualizovať PDF predpisov na webe (`public/dokumenty`) podľa slov-lex.sk: Ústava SR je verzia platná do 4. 8. 1998, zákon 473/2005 do 11. 6. 2026; overiť aj zákon 190/2003 a vyhlášky 634/2005 a 555/2003. Preveriť, či sa zmeny netýkajú testových otázok a rád.
+- [ ] Aktualizovať PDF predpisov na webe (`public/dokumenty`) podľa slov-lex.sk: zákon 473/2005 je vymenený (od 12. 6. 2026) a nasadený; Ústava SR je stále verzia platná do 4. 8. 1998; overiť zákon 190/2003 a vyhlášky 634/2005 a 555/2003. Preveriť, či sa novela 473/2005 netýka testových otázok a rád.
 - [x] Formulár preukazu: údaje sa dajú uložiť len v telefóne; telefón a súhlas sa vyžadujú len pri zapnutí SMS (overené v simulátore). Upravený text súhlasu zahrnúť do právnej kontroly.
 - [ ] Prihlasovacie údaje zadať v App Store Connect a Play Console.
 - [x] Apple Developer účet overený.
 - [x] Play Console účet organizácie vytvorený, poplatok zaplatený, status obchodníka deklarovaný.
-- [ ] Play Console: overenie totožnosti (Google kontroluje), overenie webu a telefónnych čísel.
+- [x] Play Console: overenia účtu vybavené (totožnosť a ostatné úlohy na domovskej stránke).
+- [ ] Play Console: vytvoriť appku SafeCore (balík `sk.safecore.mobile`).
 - [ ] Play Console → Obsah aplikácie: status obchodníka pre appku, prístup k appke, Data safety, hodnotenie obsahu.
-- [ ] Screenshoty: iOS zábery 1–4, 6 a 7 (1320×2868) sú v `store/screenshots/ios/`; záber 5 nafotiť po aktualizácii PDF. Pre Play upraviť pomer strán (max 2:1) a pripraviť feature graphic.
+- [x] Screenshoty pre iOS: zábery 1–7 (1320×2868) v `store/screenshots/ios/`.
+- [ ] Google Play: upraviť pomer strán screenshotov (max 2:1) a pripraviť feature graphic 1024×500.
 - [ ] App Store Connect: zmeniť názov appky na „SafeCore“, doplniť `ascAppId` do `eas.json`.
 - [ ] Produkčné buildy iOS a Android; Android otestovať na zariadení alebo emulátore (zatiaľ netestovaný).
 - [ ] Otestovať zrušenie pripomienky nedokončeného testu po jeho dokončení a automatickú pripomienku platnosti zo servera.
